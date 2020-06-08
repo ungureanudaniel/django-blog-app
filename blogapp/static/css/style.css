@@ -1,0 +1,44 @@
+body {
+
+}
+
+.polygon {
+  position: relative;
+}
+#middle {
+  font-family: 'Bookman', serif;
+  font-size: 5rem;
+  text-align:right;
+  position: relative;
+}
+
+#first {
+  font-family: 'Bookman', serif;
+  position: relative;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: 1.5rem;
+  position: relative;
+}
+
+#last {
+  font-family: 'Bookman', serif;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  position: relative;
+  font-size: 1.5rem;
+  position: relative;
+}
+
+.navbar {
+  color: black;
+}
+
+.underheader {
+  background-color: lavender;
+  padding: 2rem;
+}
+
+.footer_title {
+  font-family: 'Bookman', serif;
+}

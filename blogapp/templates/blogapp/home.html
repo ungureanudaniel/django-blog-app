@@ -1,0 +1,32 @@
+{% extends 'blogapp/base.html' %}
+
+{% block content %}
+<div class="underheader container-fluid mb-5">
+  <div class="row">
+    <div class="col-lg-6 col-md-12">
+      <form class="float-left form-inline my-2 mr-0 my-lg-0 justify-content-end" method="GET" action="{% url 'search' %}">
+        <input name="q" value="{{ request.GET.q }}" placeholder="Search...">
+        <button class="btn btn-outline-dark type="submit">
+          Search
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+{% for post in object_list %}
+  {% if post.status == 'Published' %}
+  <ul class="list-unstyled">
+    <li><h3><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></h3></li>
+    <li><p><small>by {{ post.author.first_name }} {{ post.author.last_name }}</small></p></li>
+    <li><p><small><a href="{% url 'category_detail' slug=post.category.slug %}">{{ post.category }}</a></small></p></li>
+    <li><p>{{ post.text|slice:100 }}</p></li>
+    <li><p>{{ post.created_date }}</p></li>
+  </ul>
+  {% endif %}
+{% endfor %}
+
+
+
+{% endblock %}
