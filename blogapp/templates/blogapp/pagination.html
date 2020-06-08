@@ -1,35 +1,21 @@
 
-{% block content %}
+
 {% if items.has_other_pages %}
-<div class="text-center">
-  <div class="col-6 offset-3 text-center pagination-set">
-    <nav aria-label="">
-      <ul class="pagination" style="justify-content: center;">
-        {% if items.has_previous %}
-        <li class="page-item"><a class="page-link" style="background-color: #ffd536; color: #1e415e; border: #1e415e;" href="?page={{ items.previous_page_number }}">&laquo;</a>
-        </li>
-        {% else %}
+<div class="pagination container-fluid justify-content-center my-5">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?{{ page_request_var }}=1">&laquo; first</a>
+            <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}">previous</a>
+        {% endif %}
 
-        <li class="page-item disabled"><a class="page-link" style="background-color: #ffd536; color: #1e415e; border: #1e415e;" href="?page={{ items.next_page_number }}">
-        </li>
-        {% endif %}
-        {% for i in page_range %}
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
 
-        {% if items.number == i %}
-        <li class="page-item active"><a class="page-link" style="background-color: #1e415e;  color: #1e415e; border: #1e415e" href="#">{{ items.next_page_number }}<span class="sr-only">(current)</span></a></li>
-        {% else %}
-        <li class="page-item"><a class="page-link" style="background-color: #ffd536; color: #1e415e; border: #1e415e;" href="#">
+        {% if object_list.has_next %}
+            <a href="?{{ page_request_var }}={{ object_list.next_page_number }}">next</a>
+            <a href="?{{ page_request_var }}={{ object_list.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
-        {% endfor %}
-        {% if items.has_next %}
-        <li class="page-item"><a class="page-link" style="background-color: #ffd536; color: #1e415e; border: #1e415e;" href="?page={{ items.next_page_number }}">&raquo;</a></li>
-        {% else %}
-        <li class="page-item disabled"><a class="page-link" style="background-color: #ffd536; color: #1e415e; border: #1e415e;" href="#"></a></li>
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
+    </span>
 </div>
 {% endif %}
-
-{% endblock %}

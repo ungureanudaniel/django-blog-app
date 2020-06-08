@@ -38,9 +38,12 @@ class Post(models.Model):
     updated_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, default='Draft', choices=STATUS_CHOICES)
 
+    class Meta:
+        ordering = ["-created_date", "-updated_date"]
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
-
+    
     def __str__(self):
         return self.title

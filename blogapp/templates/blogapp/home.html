@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-lg-6 col-md-12">
       <form class="float-left form-inline my-2 mr-0 my-lg-0 justify-content-end" method="GET" action="{% url 'search' %}">
-        <input name="q" value="{{ request.GET.q }}" placeholder="Search...">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search...">
         <button class="btn btn-outline-dark type="submit">
           Search
         </button>
@@ -27,6 +27,25 @@
   {% endif %}
 {% endfor %}
 
+{% if object_list.has_other_pages %}
+<div class="pagination container-fluid justify-content-center my-5">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?{{ page_request_var }}=1">&laquo; first</a>
+            <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?{{ page_request_var }}={{ object_list.next_page_number }}">next</a>
+            <a href="?{{ page_request_var }}={{ object_list.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
 
 
 {% endblock %}
