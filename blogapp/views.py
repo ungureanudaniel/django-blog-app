@@ -12,7 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def PostListView(request):
     template_name = 'blogapp/home.html'
     object_list = Post.objects.all()
-    paginator = Paginator(object_list, 1) # Show 25 contacts per page.
+    paginator = Paginator(object_list, 10) # Show 25 contacts per page.
     page_request_var = "page"
     page = request.GET.get(page_request_var)
     try:
@@ -33,8 +33,10 @@ def PostListView(request):
 def PostDetailView(request, slug):
     template_name = 'blogapp/post_detail.html'
     post = get_object_or_404(Post, slug=slug)
+    post_categories = Post.objects.filter(category=slug)
 
     context = {
+        'post_categories': post_categories,
         'post': post,
     }
     return render(request, template_name, context)
@@ -49,6 +51,28 @@ def CategoryView(request, slug):
         'post_categories': post_categories,
     }
     return render(request, template_name, context)
+
+# ABOUT ME VIEW
+def AboutView(request):
+    template_name = 'blogapp/about.html'
+    about_list = About.objects.all()
+
+    context = {
+        'about_list': about_list,
+    }
+    return render(request, template_name, context)
+
+# CONTACT VIEW
+def ContactView(request):
+    template_name = 'blogapp/contact.html'
+    if request.method == "POST":
+        message_name = request.POST.get('message-name')
+        message_email = request.POST.get('message-email')
+        message = request.POST.get('message')
+
+        return render(request, template_name, {'message_name': message_name})
+    else:
+        return render(request, template_name, {})
 
 def search(request):
     template_name = 'blogapp/home.html'

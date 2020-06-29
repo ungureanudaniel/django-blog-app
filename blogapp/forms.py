@@ -19,3 +19,15 @@ class PostForm(forms.ModelForm):
             #'published_date': forms.DateField(attrs = {'class': 'form-control'}),
             #'created_date': forms.DateField(attrs = {'class': 'form-control'}),
         }
+
+class Category (forms.ModelForm):
+
+    class Meta:
+        model = Category
+        fields = ['name', 'seo_name', 'description']
+
+        widgets = {
+            'name': forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Add a name...'}),
+            'seo_name': forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Add a seo_name...'}),
+            'description': forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Add a description...'}),
+        }

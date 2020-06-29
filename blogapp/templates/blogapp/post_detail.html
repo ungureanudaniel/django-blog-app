@@ -19,14 +19,15 @@
     </div>
   </div>
 </div>
-
+{% for item in post_categories %}
 <div class="posts container-fluid mb-3 ">
   <ul class="list-unstyled">
-    <li class="text-center"><h1>{{ post.title }}</h1></li>
-    <li class="text-center"><p>by {{ post.author }}</p></li>
-    <li class="text-center"><p><small><a href="{% url 'category_detail' slug=post.category.slug %}">- {{ post.category }} -</a></small></p></li>
-    <li><p>{{ post.text }}</p></li>
-    <li><p>{{ post.created_date }}</p></li>
+    <li class="text-center"><h1>{{ item.title }}</h1></li>
+    <li class="text-center"><p>by {{ item.author }}</p></li>
+    <li class="text-center"><p><small><a href="{% url 'category_detail' slug=post.category.slug %}">- {{ item.category }} -</a></small></p></li>
+    <li><p>{{ item.text }}</p></li>
+    <li><p>{{ item.created_date }}</p></li>
   </ul>
 </div>
+{% endfor %}
 {% endblock %}
