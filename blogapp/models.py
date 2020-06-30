@@ -47,3 +47,15 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+#blog post about section
+class About(models.Model):
+    title = models.CharField(max_length=250)
+    text = models.CharField(max_length=600)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(About, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title

@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Category
+from django.core.mail import send_mail, BadHeaderError
+from .models import Post, Category, About
 from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -70,7 +72,22 @@ def ContactView(request):
         message_email = request.POST.get('message-email')
         message = request.POST.get('message')
 
-        return render(request, template_name, {'message_name': message_name})
+        #send email
+        if message and message_name and message_email:
+            try:
+                send_mail(
+                message_name,
+                message,
+                message_email,
+                ['ioanad.ungureanu@gmail.com']
+                )
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return HttpResponseRedirect('/contact/thanks/')
+        else:
+            return HttpResponse('Make sure all fields are entered and valid.')
+
+        render(request, template_name, {'message_name': message_name})
     else:
         return render(request, template_name, {})
 

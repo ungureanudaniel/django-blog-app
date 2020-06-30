@@ -13,6 +13,11 @@
                             <div class="breadcrumb__option">
                                 <a href="{% url 'home' %}">Home</a>
                                 <span>Contact</span>
+                                {% if message_name %}
+                                  <h2>Multumesc {{ message_name }} pentru mesaj!</h2>
+                                  <h4>Voi reveni cu un raspuns cat de repede pot...</h4>
+                                  <br/><br/><br/><br/>
+                                {% else %}
                             </div>
                         </div>
                     </div>
@@ -55,6 +60,7 @@
                             </form>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
