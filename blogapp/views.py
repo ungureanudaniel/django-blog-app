@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.mail import send_mail, BadHeaderError
 from .models import Post, Category, About
+from marketing.models import Subscribe
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -14,21 +15,28 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def PostListView(request):
     template_name = 'blogapp/home.html'
     object_list = Post.objects.all()
-    paginator = Paginator(object_list, 10) # Show 25 contacts per page.
-    page_request_var = "page"
-    page = request.GET.get(page_request_var)
-    try:
-        queryset = paginator.page(page)
-    except PageNotAnInteger:
+    four_latest = Post.objects.order_by('-created_date')[1:4]
+    categories = Category.objects.all()
+    about_list = About.objects.all()[:1]
+
+    #paginator = Paginator(object_list, 10) # Show 25 contacts per page.
+    #page_request_var = "page"
+    #page = request.GET.get(page_request_var)
+    #try:
+    #    queryset = paginator.page(page)
+    #except PageNotAnInteger:
         #if page is not integer, deliver first page
-        queryset = paginator.page(1)
-    except EmptyPage:
+    #    queryset = paginator.page(1)
+    #except EmptyPage:
         #if page is out of range, deliver last page
-        queryset = paginator.page(paginator.num_pages)
+    #    queryset = paginator.page(paginator.num_pages)
 
     context = {
-        'object_list': queryset,
-        'page_request_var': page_request_var,
+        'about_list': about_list,
+        'categories': categories,
+        'four_latest': four_latest,
+        'object_list': object_list,
+        #'page_request_var': page_request_var,
     }
     return render(request, template_name, context)
 
@@ -42,6 +50,20 @@ def PostDetailView(request, slug):
         'post': post,
     }
     return render(request, template_name, context)
+
+#subscription to newsletter
+def SubscribeView(request):
+    template_name = 'blogapp/signin.html'
+    model = Subscribe
+
+    if request.method == "POST":
+        email =  request.POST["email"]
+        new_signup =  Subscribe()
+        new_signup.email = email
+        new_signup.save()
+
+    return render(request, template_name)
+
 
 def CategoryView(request, slug):
     template_name = 'blogapp/category_detail.html'

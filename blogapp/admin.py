@@ -1,14 +1,14 @@
 from django.contrib import admin
-from .models import Post, Category
+from .models import Post, Category, About
 
 class CategoryAdmin(admin.ModelAdmin):
-    exclude = ('slug',)
+    pass
 
 class PostAdmin(admin.ModelAdmin):
-    exclude = ('slug',)
-    list_display = ('id', 'title', 'status', 'category', 'created_date', 'updated_date',)
+    list_display = ('id', 'title', 'status', 'category', 'created_date',)
     list_filter = ('status',)
     search_fields = ('title', 'text',)
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.register(About)
