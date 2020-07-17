@@ -4,24 +4,25 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Foodeiblog Template">
-    <meta name="keywords" content="Foodeiblog, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="Foodeiblog Template" name="description">
+    <meta content="Foodeiblog, unica, creative, html" name="keywords">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>The Healthy Lifestyle Blog | Template</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Unna:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/elegant-icons.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/owl.carousel.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/slicknav.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -34,12 +35,12 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="{% url 'home' %}"><img src="{% static 'img/humberger/humberger-logo.png' %}" alt=""></a>
+            <a href="{% url 'home' %}"><img alt="" src="{% static 'img/logo7.png' %}"></a>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'post_detail' slug='recipe' %}">Recipes</a></li>
+                <li><a href="#">Recipes</a></li>
                 <li><a href="#">Dinner</a></li>
                 <li><a href="#">Desserts</a></li>
                 <li><a href="{% url 'about' %}">About</a></li>
@@ -51,12 +52,12 @@
             <div class="humberger__menu__title sidebar__item__title">
                 <h6>About me</h6>
             </div>
-            <img src="{% static 'img/humberger/ioana-2.jpg' %}" alt="">
+            <img alt="" src="{% static 'img/humberger/ioana-2.jpg' %}">
             {% for item in about_list %}
             <h6 style="color:white;">{{ item.title }}</h6>
             <p>{{ item.text|slice:190 }}...</p>
             {% endfor %}
-            <a href="{% url 'about' %}" class="btn btn-dark mb-2">Read more</a>
+            <a class="btn btn-dark mb-2" href="{% url 'about' %}">Read more</a>
             <div class="humberger__menu__about__social sidebar__item__follow__links">
                 <a href="#"><i class="fa fa-facebook"></i></a>
                 <a href="#"><i class="fa fa-twitter"></i></a>
@@ -72,13 +73,13 @@
             <p>Inscrie-te la newsletter-ul meu si vei fi la curent cu cele mai importante aspecte ale unei vieti sanatoase.</p>
             <form action="." method="POST">
               {% csrf_token %}
-                <input type="email" name="email" class="email-input" placeholder="Your email...">
+                <input class="email-input" name="email" placeholder="Your email..." type="email">
                 <label for="agree-check">
                     I agree to the <a href="#">terms & conditions</a>
-                    <input type="checkbox" id="agree-check">
+                    <input id="agree-check" type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-                <button type="submit" class="site-btn">Subscribe</button>
+                <button class="site-btn" type="submit">Subscribe</button>
             </form>
         </div>
     </div>
@@ -98,12 +99,17 @@
                         <nav class="header__menu">
                             <ul>
                                 <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                                <li><a href="{% url 'post_detail' slug='recipes' %}">Recipes</a>
+                                <li><a href="#">Recipes</a>
                                 </li>
-                                <li><a href="{% url 'post_detail' slug='lifestyle' %}">Lifestyle</a></li>
-                                <li><a href="{% url 'post_detail' slug='children' %}">Children</a></li>
+                                <li><a href="#">Lifestyle</a></li>
+                                <li><a href="#">Children</a></li>
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 <li><a href="{% url 'contact' %}">Contact</a></li>
+                                {% if user.is_authenticated %}
+                                <li><a href="{% url 'add_post' %}">Add post</a></li>
+                                <li><a href="{% url 'add_category' %}">Add category</a></li>
+                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                                {% endif %}
                             </ul>
                         </nav>
                     </div>
@@ -119,12 +125,12 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__btn">
-                        <a href="{% url 'signin' %}" class="primary-btn">Subscribe</a>
+                        <a class="primary-btn" href="{% url 'login' %}">Subscribe</a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="header__logo">
-                        <a href="{% url 'home' %}"><img src="img/logo.png" alt=""></a>
+                        <a href="{% url 'home' %}"><img alt="" src="{% static 'img/logo6.png' %}"></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3">
@@ -149,13 +155,27 @@
     <footer class="footer">
         <div class="container-fluid">
             <div class="footer__instagram">
+
                 <div class="footer__instagram__avatar">
                     <div class="footer__instagram__avatar--pic">
-                        <img src="{% static 'img/footer/instagram-avatar.jpg' %}" alt="">
+                        <img alt="" src="{% static 'img/footer/insta_logo.png' %}">
                     </div>
                     <div class="footer__instagram__avatar--text">
-                        <h5><a href="http://www.instagram.com/artisanbakerybrasov">@ artisanbakerybrasov</a></h5>
-                        <span>23,7k follower</span>
+                        <h5><a href="https://www.instagram.com/artisanbakerybrasov/"><small></small></a></h5>
+
+                        <span>{{ instagram_followers }} followers</span>
+
+                    </div>
+                </div>
+                 <div class="footer__facebook__avatar">
+                    <div class="footer__facebook__avatar--pic">
+                        <img alt="" src="{% static 'img/footer/fb_logo.png' %}">
+                    </div>
+                    <div class="footer__facebook__avatar--text">
+                        <h5><a href="https://www.facebook.com/artisanbakerybrasov/"><small></small></a></h5>
+
+                        <span>{{ fb_followers }} followers</span>
+
                     </div>
                 </div>
                 <div class="row">
@@ -185,7 +205,7 @@
                 <div class="col-lg-12">
                     <div class="footer__text">
                         <div class="footer__logo">
-                            <a href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                            <a href="{% url 'home' %}"><img alt="" src="{% static 'img/logo6.png' %}"></a>
                         </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                             ut<br /> labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus
@@ -198,7 +218,7 @@
                     </div>
                     <div class="footer__copyright">
                         <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script><a href="{% url 'login' %}"> All rights reserved</a> | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script><a href="{% url 'login' %}"> All rights reserved</a> | This template is made with <i aria-hidden="true" class="fa fa-heart"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
                     </div>
                 </div>
@@ -211,8 +231,8 @@
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch">+</div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+            <form class="search-model-form" action="{% url 'search' %}">
+                <input id="search-input" name="q" placeholder="Search here....." type="text">
             </form>
         </div>
     </div>

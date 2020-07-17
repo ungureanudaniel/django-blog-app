@@ -1168,10 +1168,12 @@ ol {
 
 .categories__post__item__text .post__widget {
 	margin-bottom: 10px;
+	text-decoration: inherit;
 }
 
 .categories__post__item__text .post__widget li {
 	list-style: none;
+	text-decoration: inherit;
 	display: inline-block;
 	margin-right: 25px;
 	font-size: 12px;
@@ -1181,6 +1183,7 @@ ol {
 
 .categories__post__item__text .post__widget li span {
 	color: #111111;
+	text-decoration: inherit;
 }
 
 .categories__post__item__text .post__widget li:after {
@@ -1859,7 +1862,39 @@ ol {
 	background: #f4952f;
 	color: #ffffff;
 }
+.single-post__edit {
+	position: absolute;
+	top: 40px;
+	left: 800px;
+}
 
+.single-post__edit ul li {
+	list-style: none;
+}
+
+.single-post__edit ul li a {
+	display: inline-block;
+	font-size: 16px;
+	color: #111111;
+	height: 46px;
+	width: 46px;
+	background: #f2f2f2;
+	line-height: 46px;
+	text-align: center;
+	-webkit-transition: all, 0.3s;
+	-o-transition: all, 0.3s;
+	transition: all, 0.3s;
+	margin-bottom: 10px;
+}
+
+.single-post__edit ul li a:last-child {
+	margin-right: 0;
+}
+
+.single-post__edit ul li a:hover {
+	background: #f4952f;
+	color: #ffffff;
+}
 .single-post__top__text,
 .single-post__middle__text {
 	margin-bottom: 25px;
@@ -2352,7 +2387,7 @@ ol {
 	background: #f5f5f5;
 	padding-top: 20px;
 }
-
+/* instagram */
 .footer__instagram {
 	padding-left: 15px;
 	padding-right: 15px;
@@ -2364,6 +2399,7 @@ ol {
 	margin-right: -10px !important;
 	margin-left: -10px !important;
 	margin-bottom: 10px;
+
 }
 
 .footer__instagram__avatar {
@@ -2377,7 +2413,7 @@ ol {
 	top: 50%;
 	-webkit-transform: translate(-120px, -50px);
 	-ms-transform: translate(-120px, -50px);
-	transform: translate(-120px, -50px);
+	transform: translate(-120px, 0px);
 	z-index: 1;
 }
 
@@ -2394,6 +2430,7 @@ ol {
 
 .footer__instagram__avatar .footer__instagram__avatar--text {
 	overflow: hidden;
+
 }
 
 .footer__instagram__avatar .footer__instagram__avatar--text h5 {
@@ -2407,6 +2444,59 @@ ol {
 	font-size: 14px;
 	color: #888888;
 }
+
+/* facebook */
+
+.footer__facebook__item {
+	height: 305px;
+	margin-right: -10px !important;
+	margin-left: -10px !important;
+	margin-bottom: 10px;
+}
+
+.footer__facebook__avatar {
+	display: inline-block;
+	padding: 20px 30px;
+	background: #ffffff;
+	position: absolute;
+	height: 90px;
+	width: 240px;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-120px, -50px);
+	-ms-transform: translate(-120px, -50px);
+	transform: translate(-120px, -100px);
+	z-index: 1;
+}
+
+.footer__facebook__avatar .footer__facebook__avatar--pic {
+	float: left;
+	margin-right: 15px;
+}
+
+.footer__facebook__avatar .footer__facebook__avatar--pic img {
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+}
+
+.footer__facebook__avatar .footer__facebook__avatar--text {
+	overflow: hidden;
+}
+
+.footer__facebook__avatar .footer__facebook__avatar--text h5 {
+	font-size: 20px;
+	color: #111111;
+	font-weight: 700;
+	margin-bottom: 5px;
+}
+
+.footer__facebook__avatar .footer__facebook__avatar--text span {
+	font-size: 14px;
+	color: #888888;
+}
+
+/* endfacebook */
 
 .footer__text {
 	padding: 50px 0;
@@ -2671,7 +2761,7 @@ ol {
 }
 
 .signin__content {
-	width: 640px;
+	width: 940px;
 	text-align: center;
 	margin: 80px 0 50px;
 }
@@ -3067,6 +3157,9 @@ ol {
 	.footer__instagram__item {
 		height: 180px;
 	}
+	.footer__facebook__item {
+		height: 180px;
+	}
 }
 
 /* Tablet Device = 768px */
@@ -3098,6 +3191,15 @@ ol {
 		display: inline-block;
 		margin-right: 6px;
 	}
+	.single-post__edit {
+		position: relative;
+		top: 0;
+		left: 0;
+		margin-bottom: 25px;
+	}
+	.single-post__edit ul li {
+		display: inline-block;
+		margin-right: 6px;
 	.single-post__more__details img {
 		margin-bottom: 25px;
 	}
@@ -3112,6 +3214,9 @@ ol {
 	.footer__instagram__item {
 		height: 180px;
 	}
+	.footer__facebook__item {
+		height: 180px;
+	}
 }
 
 /* Wide Mobile = 480px */
@@ -3124,6 +3229,16 @@ ol {
 		margin-bottom: 25px;
 	}
 	.single-post__social__item ul li {
+		display: inline-block;
+		margin-right: 6px;
+	}
+	.single-post__edit {
+		position: relative;
+		top: 0;
+		left: 0;
+		margin-bottom: 25px;
+	}
+	.single-post__edit ul li {
 		display: inline-block;
 		margin-right: 6px;
 	}
@@ -3197,6 +3312,10 @@ ol {
 		align-items: flex-start;
 	}
 	.footer__instagram__item {
+		height: 180px;
+	}
+
+	.footer__facebook__item {
 		height: 180px;
 	}
 }

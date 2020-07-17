@@ -10,7 +10,7 @@
     <div class="hero__slider owl-carousel">
         <div class="hero__item">
             <div class="container-fluid">
-
+            <h3 class="text-center">Feature Posts</h3><br/><hr>
                 <div class="row">
                   {% for post in object_list %}
                     {% if forloop.first %}
@@ -24,12 +24,12 @@
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li>{{ post.category }}</li>
+                                        <li style="text-decoration:inherit">{{ post.category }}</li>
                                     </ul>
-                                    <h4>{{ post.title }}</h4>
+                                    <h4><a style="text-decoration:inherit;" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h4>
                                     <ul class="widget">
                                         <li>by <span>{{ post.author.first_name }} {{ post.author.last_name }}</span></li>
-                                        <li>views</li>
+                                        <li>{{ views_count }}</li>
                                         <li>{{ comment_count }}</li>
                                     </ul>
                                 </div>
@@ -54,7 +54,7 @@
                                     <ul class="label">
                                         <li>{{ post.category }}</li>
                                     </ul>
-                                    <h5>{{ post.title }}</h5>
+                                    <h5><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                                     <ul class="label">
                                         <li>{{ post.category }}</li>
                                     </ul>
-                                    <h5>{{ post.title }}</h5>
+                                    <h5><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                                     <ul class="label">
                                         <li>{{ post.category }}</li>
                                     </ul>
-                                    <h5>{{ post.title }}</h5>
+                                    <h5><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
                             </div>
                         </div>
@@ -197,18 +197,21 @@
 <!-- Categories Section Begin -->
 
 <section class="categories spad">
-
+    <h3 class="text-center">Categories</h3><hr>
     <div class="container">
 
         <div class="row" >
-          {% for item in categories %}
+          {% for cat in categories %}
             <div class="col-lg-4 col-md-6 col-sm-6">
-                <div class="categories__item set-bg" data-setbg="{{ item.image.url }}">
+                <hr>
+                <div class="categories__item set-bg" data-setbg="{{ cat.image.url }}">
                     <div class="categories__hover__text">
-                        <h5>{{ item.name }}</h5>
-                        <p>28 articles</p>
+                        <h5>{{ cat.name }}</h5>
+                        <p class="text-center">{{ cat.category__count }} articles</p>
                     </div>
+
                 </div>
+                <hr>
             </div>
           {% endfor %}
 
@@ -236,7 +239,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-8">
-                  {% for post in object_list %}
+                  {% for post in queryset %}
                     <div class="categories__post__item categories__post__item--large">
                         <div class="categories__post__item__pic set-bg"
                             data-setbg="{{ post.image.url }}">
@@ -247,15 +250,20 @@
                         </div>
                         <div class="categories__post__item__text">
                             <ul class="post__label--large">
-                                <li>{{ post.category }}</li>
+
+                                <li style="text-decoration:none;"><a href="#">{{ post.category }}</a></li>
                             </ul>
-                            <h3><a href="#">{{ post.title }}</a></h3>
+                            <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
                             <ul class="post__widget">
                                 <li>by <span>{{ post.author.first_name }} {{ post.author.last_name }}</span></li>
-                                <li>No of views</li>
-                                <li><a href="#">{{ post.comment_count }}</a></li>
+                                <li><i class="fa fa-eye">  {{ post.views_count }}</i></li>
+                                <li><a href="{% url 'post_detail' pk=post.pk %}"><i class="fa fa-comment">  {{ post.comments.count }}</i></a></li>
+                                {% if user.is_authenticated %}
+                                <li><a href="{% url 'post_edit' post.pk %}"><i class="fa fa-pencil"></i></a></li>
+                                <li><a href="{% url 'post_delete' post.pk %}"><i class="fa fa-trash"></i></a></li>
+                                {% endif %}
                             </ul>
-                            <p>{{ post.text|slice:200 }}</p>
+                            <p>{{ post.text|safe|slice:200 }}</p>
                             <a href="#" class="primary-btn">Read more</a>
                             <div class="post__social">
                                 <span>Share</span>
@@ -266,11 +274,27 @@
                         </div>
                     </div>
                     {% endfor %}
-                        <div class="col-lg-12 text-center">
-                            <div class="load__more__btn">
-                                <a href="#">Load more</a>
-                            </div>
-                        </div>
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination pagination-template d-flex justify-content-center">
+                            {% if queryset.has_previous %}
+                            <li class="page-item">
+                              <a class="page-link" href="?{{ page_request_var }}={{ queryset.previous_page_number }}" aria-label="Previous">
+                                  <i class="fa fa-angle-left"></i>
+                              </a>
+                            </li>
+                            {% endif %}
+
+                            <li class="page-item"><a class="page-link" href="?{{ page_request_var }}={{ queryset.number }}">{{ queryset.number }}</a></li>
+
+                              {% if queryset.has_next %}
+                            <li class="page-item">
+                              <a class="page-link" href="?{{ page_request_var }}={{ queryset.next_page_number }}" aria-label="Next">
+                                <i class="fa fa-angle-right"></i>
+                              </a>
+                            </li>
+                              {% endif %}
+                          </ul>
+                        </nav>
                     </div>
 
 
@@ -303,68 +327,70 @@
                             <div class="sidebar__item__title">
                                 <h6>Feature Posts</h6>
                             </div>
+                            {% for post in featured_posts %}
                             <div class="sidebar__feature__item__large set-bg"
-                                data-setbg="{% static 'img/sidebar/feature-post.jpg' %}">
+                                data-setbg="{{ post.image.url }}">
                                 <div class="sidebar__feature__item__large--text">
-                                    <span>Dinner</span>
-                                    <h5><a href="#">This Japanese Way of Making Iced Coffee Is a Game...</a></h5>
+                                    <span>{{ post.category }}</span>
+                                    <h5><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h5>
                                 </div>
                             </div>
-                            <div class="sidebar__feature__item__list">
-                                <div class="sidebar__feature__item__list__single">
-                                    <div class="post__meta">
-                                        <h4>08</h4>
-                                        <span>Aug</span>
-                                    </div>
-                                    <div class="post__text">
-                                        <span>Dinner</span>
-                                        <h5><a href="#">Grilled Potato and Green Bean Salad</a></h5>
-                                    </div>
-                                </div>
-                                <div class="sidebar__feature__item__list__single">
-                                    <div class="post__meta">
-                                        <h4>05</h4>
-                                        <span>Aug</span>
-                                    </div>
-                                    <div class="post__text">
-                                        <span>Smoothie</span>
-                                        <h5><a href="#">The $8 French Rosé I Buy in Bulk Every Summer</a></h5>
-                                    </div>
-                                </div>
-                                <div class="sidebar__feature__item__list__single">
-                                    <div class="post__meta">
-                                        <h4>26</h4>
-                                        <span>jul</span>
-                                    </div>
-                                    <div class="post__text">
-                                        <span>Desert</span>
-                                        <h5><a href="#">Ina Garten's Skillet-Roasted Lemon Chicken</a></h5>
-                                    </div>
-                                </div>
-                                <div class="sidebar__feature__item__list__single">
-                                    <div class="post__meta">
-                                        <h4>16</h4>
-                                        <span>jul</span>
-                                    </div>
-                                    <div class="post__text">
-                                        <span>Vegan</span>
-                                        <h5><a href="#">The Best Weeknight Baked Potatoes, 3 Creative Ways</a></h5>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
+<!--                            <!--<div class="sidebar__feature__item__list">&ndash;&gt;
+&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
+&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
+&lt;!&ndash;                                        <h4>08</h4>&ndash;&gt;
+&lt;!&ndash;                                        <span>Aug</span>&ndash;&gt;
+&lt;!&ndash;                                    </div>&ndash;&gt;
+&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
+&lt;!&ndash;                                        <span>Dinner</span>&ndash;&gt;
+&lt;!&ndash;                                        <h5><a href="#">Grilled Potato and Green Bean Salad</a></h5>&ndash;&gt;
+&lt;!&ndash;                                    </div>&ndash;&gt;
+&lt;!&ndash;                                </div>&ndash;&gt;
+&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
+&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
+&lt;!&ndash;                                        <h4>05</h4>&ndash;&gt;
+&lt;!&ndash;                                        <span>Aug</span>&ndash;&gt;
+&lt;!&ndash;                                    </div>&ndash;&gt;
+&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
+&lt;!&ndash;                                        <span>Smoothie</span>&ndash;&gt;
+&lt;!&ndash;                                        <h5><a href="#">The $8 French Rosé I Buy in Bulk Every Summer</a></h5>&ndash;&gt;
+&lt;!&ndash;                                    </div>&ndash;&gt;
+&lt;!&ndash;                                </div>&ndash;&gt;
+&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
+&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
+&lt;!&ndash;                                        <h4>26</h4>&ndash;&gt;
+&lt;!&ndash;                                        <span>jul</span>&ndash;&gt;
+&lt;!&ndash;                                    </div>&ndash;&gt;
+&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
+&lt;!&ndash;                                        <span>Desert</span>&ndash;&gt;
+&lt;!&ndash;                                        <h5><a href="#">Ina Garten's Skillet-Roasted Lemon Chicken</a></h5>&ndash;&gt;
+&lt;!&ndash;                                    </div>&ndash;&gt;
+&lt;!&ndash;                                </div>&ndash;&gt;
+&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
+&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
+&lt;!&ndash;                                        <h4>16</h4>&ndash;&gt;
+&lt;!&ndash;                                        <span>jul</span>&ndash;&gt;
+&lt;!&ndash;                                    </div>&ndash;&gt;
+&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
+&lt;!&ndash;                                        <span>Vegan</span>&ndash;&gt;
+&lt;!&ndash;                                        <h5><a href="#">The Best Weeknight Baked Potatoes, 3 Creative Ways</a></h5>&ndash;&gt;
+&lt;!&ndash;                                    </div>&ndash;&gt;
+&lt;!&ndash;                                </div>&ndash;&gt;
+&lt;!&ndash;                            </div>-->
                         </div>
                         <div class="sidebar__item__banner">
-                            <img src="img/sidebar/banner.jpg" alt="">
+                            <img src="{% static 'img/flower.jpg' %}" alt="">
                         </div>
                         <div class="sidebar__item__categories">
                             <div class="sidebar__item__title">
                                 <h6>Categories</h6>
                             </div>
+
                             <ul>
-                                <li><a href="{% url 'home' %}">Recipes <span>128</span></a></li>
-                                <li><a href="{% url 'home' %}">Dinner <span>32</span></a></li>
-                                <li><a href="{% url 'home' %}">Weightloss <span>27</span></a></li>
-                            </ul>
+                                {% for cat in category_count %}
+                                <li><a href="{% url 'home' %}">{{ cat.category|capfirst }}<span>{{ cat.category__count }}</span></a></li>
+                                {% endfor %}
                         </div>
                         <div class="sidebar__subscribe__item">
                             <div class="sidebar__item__title">
