@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li style="text-decoration:inherit">{{ post.category }}</li>
+                                        <li style="text-decoration:inherit"><a href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h4><a style="text-decoration:inherit;" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h4>
                                     <ul class="widget">
@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li>{{ post.category }}</li>
+                                        <li><a href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li>{{ post.category }}</li>
+                                        <li><a href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li>{{ post.category }}</li>
+                                        <li><a href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
@@ -206,14 +206,16 @@
                 <hr>
                 <div class="categories__item set-bg" data-setbg="{{ cat.image.url }}">
                     <div class="categories__hover__text">
-                        <h5>{{ cat.name }}</h5>
+                        <a>{{ cat.name }}</h5>
                         <p class="text-center">{{ cat.category__count }} articles</p>
                     </div>
 
                 </div>
                 <hr>
             </div>
+            <hr>
           {% endfor %}
+
 
 <!--
             <div class="col-lg-3 col-md-6 col-sm-6">
@@ -235,6 +237,8 @@
         </div>
     </div>
 -->
+
+
     <div class="categories__post">
         <div class="container">
             <div class="row">
@@ -251,7 +255,7 @@
                         <div class="categories__post__item__text">
                             <ul class="post__label--large">
 
-                                <li style="text-decoration:none;"><a href="#">{{ post.category }}</a></li>
+                                <li style="text-decoration:none;"><a href="{% url 'category' post.category %}">{{ post.category|slugify }}</a></li>
                             </ul>
                             <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
                             <ul class="post__widget">
@@ -331,7 +335,7 @@
                             <div class="sidebar__feature__item__large set-bg"
                                 data-setbg="{{ post.image.url }}">
                                 <div class="sidebar__feature__item__large--text">
-                                    <span>{{ post.category }}</span>
+                                    <span><a href="{% url 'category' post.category %}">{{ post.category }}</a></span>
                                     <h5><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h5>
                                 </div>
                             </div>
@@ -392,22 +396,13 @@
                                 <li><a href="{% url 'home' %}">{{ cat.category|capfirst }}<span>{{ cat.category__count }}</span></a></li>
                                 {% endfor %}
                         </div>
-                        <div class="sidebar__subscribe__item">
-                            <div class="sidebar__item__title">
-                                <h6>Subscribe</h6>
+                     <div class="sidebar__subscribe__item">
+                                <div class="sidebar__item__title">
+                                    <h6>Subscribe</h6>
+                                </div>
+                                <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
+                                <a class="site-btn" href="{% url 'subscribe' %}">Subscribe</a>
                             </div>
-                            <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
-                            <form action="#">
-                                <input type="text" class="email-input" placeholder="Your email">
-                                <label for="s-agree-check">
-                                    I agree to the terms & conditions
-                                    <input type="checkbox" id="s-agree-check">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <button type="submit" class="site-btn">Subscribe</button>
-                            </form>
-                        </div>
-                    </div>
                 </div>
               </div>
             </div>

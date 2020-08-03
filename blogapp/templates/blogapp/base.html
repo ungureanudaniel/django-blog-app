@@ -70,17 +70,9 @@
             <div class="humberger__menu__title sidebar__item__title">
                 <h6>Subscribe</h6>
             </div>
-            <p>Inscrie-te la newsletter-ul meu si vei fi la curent cu cele mai importante aspecte ale unei vieti sanatoase.</p>
-            <form action="." method="POST">
-              {% csrf_token %}
-                <input class="email-input" name="email" placeholder="Your email..." type="email">
-                <label for="agree-check">
-                    I agree to the <a href="#">terms & conditions</a>
-                    <input id="agree-check" type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <button class="site-btn" type="submit">Subscribe</button>
-            </form>
+            <p>Subscribe to our newsletter and get my newest updates right on your inbox.</p>
+            <a class="site-btn" href="{% url 'subscribe' %}">Subscribe</a>
+
         </div>
     </div>
     <!-- Humberger End -->
@@ -99,14 +91,19 @@
                         <nav class="header__menu">
                             <ul>
                                 <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                                <li><a href="#">Recipes</a>
+                                <li class="dropdown"><a href="#">Post categories</a>
+                                    <ul class="dropdown__menu">
+                                        {% for cat in cat_menu %}
+                                        <li><a style="color:white;" href="{% url 'category' cat|slugify %}">{{ cat }}</a></li>
+
+                                        {% endfor %}
+                                    </ul>
                                 </li>
-                                <li><a href="#">Lifestyle</a></li>
-                                <li><a href="#">Children</a></li>
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 <li><a href="{% url 'contact' %}">Contact</a></li>
                                 {% if user.is_authenticated %}
                                 <li><a href="{% url 'add_post' %}">Add post</a></li>
+                                <li><a href="{% url 'draft_posts' %}">Draft posts</a></li>
                                 <li><a href="{% url 'add_category' %}">Add category</a></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                                 {% endif %}
@@ -125,7 +122,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__btn">
-                        <a class="primary-btn" href="{% url 'login' %}">Subscribe</a>
+                        <a class="primary-btn" href="{% url 'subscribe' %}">Subscribe</a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
@@ -220,6 +217,14 @@
                         <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
   Copyright &copy;<script>document.write(new Date().getFullYear());</script><a href="{% url 'login' %}"> All rights reserved</a> | This template is made with <i aria-hidden="true" class="fa fa-heart"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                    </div>
+                    <p class="text-center">If you don't want to receive any of my emails anymore, please press the unsubscribe button below.</p>
+
+
+                                <div class="header__btn text-center">
+                                    <a class="primary-btn" href="{% url 'unsubscribe' %}">Unsubscribe</a>
+                                </div>
+                        </div>
                     </div>
                 </div>
             </div>

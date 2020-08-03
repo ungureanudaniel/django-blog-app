@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'blogapp',
     'crispy_forms',
     'ckeditor',
-    'marketing',
     'authentication',
+    'social_django',
 
 ]
 
@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'blogproject.urls'
@@ -70,12 +71,22 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'blogproject.wsgi.application'
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.google.GooglePlusAuth',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+WSGI_APPLICATION = "blogproject.wsgi.application"
 
 
 # Database
@@ -136,6 +147,9 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
@@ -146,3 +160,7 @@ EMAIL_USER = 'ioanad.ungureanu@gmail.com'
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 #EMAIL_USE_TLS = False
+
+MAILCHIMP_API_KEY = '61eeac0190e5488c02be481e19d16450-us10'
+MAILCHIMP_DATA_CENTER = 'us10'
+MAILCHIMP_EMAIL_LIST_ID = 'ccfe5339ce'
