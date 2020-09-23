@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [https://malluldeganduri.herokuapp.com/]
 
 # Application definition
 
@@ -103,11 +103,11 @@ WSGI_APPLICATION = "blogproject.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'malluldeganduri',
-        'USER': 'malluldeganduriuser',
-        'PASSWORD': 'Ungdan20',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': os.environ.get('DATABASE_PORT'),
 
     }
 }
@@ -162,12 +162,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
 EMAIL_USER = 'ioanad.ungureanu@gmail.com'
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 # EMAIL_USE_TLS = False
 
-MAILCHIMP_API_KEY = '61eeac0190e5488c02be481e19d16450-us10'
-MAILCHIMP_DATA_CENTER = 'us10'
-MAILCHIMP_EMAIL_LIST_ID = 'ccfe5339ce'
+MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY')
+MAILCHIMP_DATA_CENTER = os.environ.get('MAILCHIMP_DATA_CENTER')
+MAILCHIMP_EMAIL_LIST_ID = os.environ.get('MAILCHIMP_EMAIL_LIST_ID')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
