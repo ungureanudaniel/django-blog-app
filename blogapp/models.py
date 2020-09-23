@@ -6,19 +6,19 @@ from django.conf import settings
 from ckeditor.fields import RichTextField
 
 # Create your models here.
-#blog post categories
+#-----------------------------------THE POST CATEGORIES MODEL-------------------------------------------
 class Category(models.Model):
     name = models.CharField(max_length=20)
-    image = models.FileField(upload_to='category_image', blank=True)
+    image = models.FileField(upload_to='media', blank=True)
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('home')
+#
 
-
-#blog posts structure
+#----------------------------------THE POST MODEL WITH ALL DETAILS--------------------------------------
 class Post(models.Model):
     STATUS_CHOICES = (
         ('Published', 'Published'),
@@ -64,7 +64,7 @@ class Post(models.Model):
     def get_comments(self):
         return self.comments.all().order_by('-timestamp')
 
-#blog post comment section
+#------------------------------COMMENTS MODEL ON EACH POST--------------------------------
 class Comment(models.Model):
     user = models.ForeignKey(User, default="1", on_delete=models.CASCADE)
     name = models.CharField(max_length=250)
@@ -76,10 +76,11 @@ class Comment(models.Model):
         return self.name
 
 
-#blog post about section
+#----------------------------------ABOUT ME MODEL------------------------------------------
 class About(models.Model):
     title = models.CharField(max_length=250)
     text = models.CharField(max_length=600)
+    image = models.FileField(upload_to='blog_image', blank=True)
 
     def __str__(self):
         return self.title

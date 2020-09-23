@@ -1,0 +1,34 @@
+{% extends 'blogapp/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Sign In Section Begin -->
+    <div class="signin">
+        <div class="signin__warp">
+            <div class="signin__content">
+                <div class="signin__logo">
+                    <a href="{% url 'home' %}"><img src="{% static 'img/logo7.png' %}" alt=""></a>
+                </div>
+                <p>Please enter credentials</p>
+                <div class="signin__form">
+
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            <div class="signin__form__text">
+                                <div class="mb-4">LOGIN PAGE</div>
+                                <form action="/" method="POST">
+                                    {% csrf_token %}
+                                    <input type="text" name="username" placeholder="User Name*">
+                                    <input type="password" name="password" placeholder="Password">
+                                    <button type="submit" class="site-btn">Sign In</button><br/><br/><br/>
+                                    <a href="{% url 'home' %}" type="submit" class="btn-secondary">Return home</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Sign In Section End -->
+
+{% endblock %}

@@ -3,26 +3,15 @@ from django.conf import settings
 from django.core.mail import send_mail, BadHeaderError
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView
-
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import About
-from .models import Post
-from .models import Category
-from .forms import CategoryForm, PostForm, CommentForm
-#from authentication .forms import UserLoginForm
+from .models import About, Post, Category
+from .forms import PostForm, CommentForm, AboutForm, CategoryForm
 from .utils import insta_followers_count, fb_followers_count
-from authentication.models import Subscribe
-from authentication.forms import SubscribeForm
+# from authentication.models import Subscribe
+# from authentication.forms import SubscribeForm
 from django.db.models import Q, Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth import authenticate, get_user_model, login, logout
-
-
-
-
-#from django.views.generic.list import ListView
-#from django.views.generic.detail import DetailView
+from django.contrib.auth import authenticate, login, logout
 
 
 
@@ -34,46 +23,12 @@ def get_category_count():
     count = queryset.values('category', 'category__count')
     return count
 
-def SubscribeView(request):
-    form_class = SubscribeForm
-    subscribe_form = form_class(request.POST or None)
-    template = "registration/subscribe.html"
-    if request.method == "POST":
-        if subscribe_form.is_valid():
-            instance = subscribe_form.save(commit=False)
-            if Subscribe.objects.filter(email=instance.email).exists():
-                messages.warning(request, 'Sorry, your email already exists!', "alert alert-warning alert-dismissible")
-            else:
-                instance.save()
-                messages.success(request, 'Your email has been saved', "alert alert-success alert-dismissible")
-    context = {
-        'subscribe_form': subscribe_form,
-    }
-
-    return render(request, template, context)
-
-
-def UnsubscribeView(request):
-    unsubscribe_form = SubscribeForm(request.POST or None)
-    template = "registration/unsubscribe.html"
-    if unsubscribe_form.is_valid():
-        instance = unsubscribe_form.save(commit=False)
-        if Subscribe.objects.filter(email=instance.email).exists():
-            Subscribe.objects.filter(email=instance.email).delete()
-            messages.success(request, 'Your email has been removed', "alert alert-success alert-dismissible")
-        else:
-            messages.success(request, 'Sorry, but this email does not exist!', "alert alert-warning alert-dismissible")
-    context = {
-        'unsubscribe_form': unsubscribe_form,
-    }
-
-    return render(request, template, context)
 #get category for dropdown list
-# def get_context_data(self, *args, **kwargs):
-#     cat_menu = Category.objects.all()
-#     context = super(PostListView, self).get_context_data(self, *args, **kwargs)
-#     context["cat_menu"] = cat_menu
-#     return context
+def get_context_data(self, *args, **kwargs):
+    cat_menu = Category.objects.all()
+    context = super(PostListView, self).get_context_data(self, *args, **kwargs)
+    context["cat_menu"] = cat_menu
+    return context
 # nr of views
 
 #add new post
@@ -81,7 +36,7 @@ def AddPostView(request):
     template_name = 'blogapp/add_post.html'
     title = 'Create'
     form = PostForm(request.POST, request.FILES or None)
-    #categories = Post.objects.all()
+    categories = Post.objects.all()
     if request.method == 'POST':
 
         if form.is_valid():
@@ -91,6 +46,7 @@ def AddPostView(request):
             form = PostForm()
 
     context = {
+        'categories': categories,
         'title': title,
         'form': form,
     }
@@ -98,8 +54,6 @@ def AddPostView(request):
 
 
 def PostListView(request):
-    cat_menu = Category.objects.all()
-    print(cat_menu)
     category_count = get_category_count()
     print(category_count)
     template_name = 'blogapp/home.html'
@@ -123,7 +77,6 @@ def PostListView(request):
 
 
     context = {
-        'cat_menu': cat_menu,
         'categories': categories,
         'category_count': category_count,
         'queryset': page_queryset,
@@ -187,22 +140,28 @@ def PostDetailView(request, pk):
     }
     return render(request, template_name, context)
 
-#edit/update a post
+#-------------------------------CATEGORY VIEW-------------------------------------
 def PostEditView(request, pk):
     template_name = 'blogapp/edit_post.html'
     post = get_object_or_404(Post, pk=pk)
-    form = PostForm(request.POST or None, request.FILES or None, instance=post)
-    # categories = Post.objects.all()
+    #form = PostForm(request.POST or None, request.FILES or None, instance=post)
+    categories = Post.objects.all()
     if request.method == "POST":
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('post_detail/edit', pk=post.pk)
-        else:
-            form = PostForm(instance=post)
+        form = PostForm(request.POST, instance=post)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Blog post has been updated')
+        except Exception as e:
+            messages.warning(request, 'Your post was not saved!')
+            #return redirect('post_detail/edit', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
 
     context = {
+        'categories': categories,
         'form': form,
+        'post': post,
     }
     return render(request, template_name, context)
 
@@ -212,12 +171,12 @@ class PostDeleteView(DeleteView):
     model = Post
     success_url = reverse_lazy('home')
 
-#category view
+#-------------------------------CATEGORY VIEW-------------------------------------
 def CategoryView(request, cats):
     template_name = 'blogapp/category.html'
     post_categories = Post.objects.filter(category=cats.replace('-', ' '))
     print(post_categories)
-    cat_menu = Category.objects.all()
+    # cat_menu = Category.objects.all()
     instagram_followers = insta_followers_count()
     fb_followers = fb_followers_count()
     context = {
@@ -230,11 +189,11 @@ def CategoryView(request, cats):
     }
     return render(request, template_name, context)
 
-#add category
+#-------------------------------ADD CATEGORY VIEW-------------------------------------
 def AddCategoryView(request):
     template_name = 'blogapp/add_category.html'
-    form = CategoryForm(request.POST or None)
-    #categories = Post.objects.all()
+    # form = CategoryForm(request.POST or None)
+    categories = Post.objects.all()
     if request.method == "POST":
         if form.is_valid():
             # name = request.POST.get('name')
@@ -253,21 +212,66 @@ def AddCategoryView(request):
     return render(request, template_name, context)
 
 
-# ABOUT ME VIEW
+#-------------------------------ADD ABOUT ME VIEW-------------------------------------
+def AddAboutView(request):
+    template_name = 'blogapp/add_about.html'
+    title = 'Create About'
+    form = AboutForm(request.POST, request.FILES or None)
+    #categories = Post.objects.all()
+    if request.method == 'POST':
+
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        else:
+            form = PostForm()
+
+    context = {
+        'title': title,
+        'form': form,
+    }
+    return render(request, template_name, context)
+#-------------------------------ABOUT ME VIEW-------------------------------------
 def AboutView(request):
     template_name = 'blogapp/about.html'
     about_list = About.objects.all()
     instagram_followers = insta_followers_count()
     fb_followers = fb_followers_count()
-
+    form = AboutForm(request.POST or None)
     context = {
+        'form': form,
         'fb_followers': fb_followers,
         'instagram_followers': instagram_followers,
         'about_list': about_list,
     }
     return render(request, template_name, context)
 
-# CONTACT VIEW
+#-------------------------------EDIT ABOUT VIEW-------------------------------------
+def EditAboutView(request, pk):
+    template_name = 'blogapp/edit_about.html'
+    about = get_object_or_404(About, pk=pk)
+    #form = PostForm(request.POST or None, request.FILES or None, instance=post)
+    categories = Post.objects.all()
+    if request.method == "POST":
+        form = AboutForm(request.POST, instance=about)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Blog post has been updated')
+        except Exception as e:
+            messages.warning(request, 'Your post was not saved!')
+            #return redirect('post_detail/edit', pk=post.pk)
+    else:
+        form = AboutForm(instance=about)
+
+    context = {
+        'form': form,
+        'about': about,
+    }
+    return render(request, template_name, context)
+
+
+#-------------------------------CONTACT ME VIEW-------------------------------------
 def ContactView(request):
     template_name = 'blogapp/contact.html'
 
@@ -295,6 +299,7 @@ def ContactView(request):
     else:
         return render(request, template_name, {})
 
+#-------------------------------SEARCH VIEW-------------------------------------
 def search(request):
     template_name = 'blogapp/search.html'
     about_list = About.objects.all
@@ -318,3 +323,23 @@ def search(request):
         'queryset': queryset,
     }
     return render(request, template_name, context)
+
+#--------------------------------------LOGIN VIEW-----------------------------------------------
+def LoginView(request):
+    template = 'registration/login.html'
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("/")
+        else:
+            return redirect("login")
+    else:
+        return render(request, template, {})
+
+#------------------------------------------LOGOUT VIEW-------------------------------------------
+def LogoutView(request):
+    logout(request)
+    redirect("/")

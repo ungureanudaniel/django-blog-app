@@ -8,13 +8,13 @@
     <meta content="Foodeiblog, unica, creative, html" name="keywords">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <title>The Healthy Lifestyle Blog | Template</title>
+    <title>Mall-ul de Ganduri</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Unna:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
 
     <!-- Css Styles -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
@@ -43,7 +43,9 @@
                 <li><a href="#">Recipes</a></li>
                 <li><a href="#">Dinner</a></li>
                 <li><a href="#">Desserts</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
+                {% for item in abouts %}
+                <li><a href="{% url 'about' item.pk %}">About</a></li>
+                {% endfor %}
                 <li><a href="{% url 'contact' %}">Contact</a></li>
             </ul>
         </nav>
@@ -56,8 +58,9 @@
             {% for item in about_list %}
             <h6 style="color:white;">{{ item.title }}</h6>
             <p>{{ item.text|slice:190 }}...</p>
-            {% endfor %}
+
             <a class="btn btn-dark mb-2" href="{% url 'about' %}">Read more</a>
+            {% endfor %}
             <div class="humberger__menu__about__social sidebar__item__follow__links">
                 <a href="#"><i class="fa fa-facebook"></i></a>
                 <a href="#"><i class="fa fa-twitter"></i></a>
@@ -71,7 +74,7 @@
                 <h6>Subscribe</h6>
             </div>
             <p>Subscribe to our newsletter and get my newest updates right on your inbox.</p>
-            <a class="site-btn" href="{% url 'subscribe' %}">Subscribe</a>
+            <a class="site-btn" href="#">Subscribe</a>
 
         </div>
     </div>
@@ -93,18 +96,19 @@
                                 <li class="active"><a href="{% url 'home' %}">Home</a></li>
                                 <li class="dropdown"><a href="#">Post categories</a>
                                     <ul class="dropdown__menu">
-                                        {% for cat in cat_menu %}
+                                        {% for cat in categories %}
                                         <li><a style="color:white;" href="{% url 'category' cat|slugify %}">{{ cat }}</a></li>
 
                                         {% endfor %}
                                     </ul>
                                 </li>
+
                                 <li><a href="{% url 'about' %}">About</a></li>
+
                                 <li><a href="{% url 'contact' %}">Contact</a></li>
                                 {% if user.is_authenticated %}
                                 <li><a href="{% url 'add_post' %}">Add post</a></li>
                                 <li><a href="{% url 'draft_posts' %}">Draft posts</a></li>
-                                <li><a href="{% url 'add_category' %}">Add category</a></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                                 {% endif %}
                             </ul>
@@ -122,7 +126,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__btn">
-                        <a class="primary-btn" href="{% url 'subscribe' %}">Subscribe</a>
+                        <a class="primary-btn" href="#">Subscribe</a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
@@ -215,20 +219,20 @@
                     </div>
                     <div class="footer__copyright">
                         <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script><a href="{% url 'login' %}"> All rights reserved</a> | This template is made with <i aria-hidden="true" class="fa fa-heart"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script><a class="text-dark" style="cursor: pointer;" href="{% url 'login' %}"> All rights reserved</a> | This template is made with <i aria-hidden="true" class="fa fa-heart"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
                     </div>
                     <p class="text-center">If you don't want to receive any of my emails anymore, please press the unsubscribe button below.</p>
 
 
                                 <div class="header__btn text-center">
-                                    <a class="primary-btn" href="{% url 'unsubscribe' %}">Unsubscribe</a>
+                                    <a class="primary-btn" href="#">Unsubscribe</a>
                                 </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+
+
     </footer>
     <!-- Footer Section End -->
 

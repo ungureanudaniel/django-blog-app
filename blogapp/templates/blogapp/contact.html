@@ -53,9 +53,9 @@
                             </div>
                             <form action="{% url 'contact' %}" method="POST">
                               {% csrf_token %}
-                                <input type="text" name="message-name" placeholder="Name">
-                                <input type="text" name="message-email" placeholder="Email">
-                                <textarea name="message" placeholder="Message"></textarea>
+                                <input type="text" name="message-name" placeholder="Name" required="required" data-error="Name is required.">
+                                <input type="text" name="message-email" placeholder="Email" required="required" data-error="Valid email is required.">
+                                <textarea name="message" placeholder="Message" required="required" data-error="Add a few words please."></textarea>
                                 <button type="submit" class="site-btn">Submit</button>
                             </form>
                         </div>

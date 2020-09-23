@@ -16,10 +16,13 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
+                    {% for item in about_list %}
                     <div class="col-lg-6">
+
                         <div class="about__pic__item__large">
-                            <img src="{% static 'img/about/ioana-1.jpg' %}" alt="">
+                            <img src="{{ item.image.url}}" alt="">
                         </div>
                         <div class="about__pic">
                             <div class="about__pic__item">
@@ -33,16 +36,24 @@
                     <div class="col-lg-6">
                         <div class="about__right__text">
 
-                          {% for item in about_list %}
+
                             <h2>{{ item.title }}</h2>
+                            {% if user.is_authenticated %}
+                                <div class="single-post__edit">
+                                    <ul>
+                                        <li><a href="{% url 'edit_about' item.pk %}"><i class="fa fa-pencil"></i></a></li>
+                                    </ul>
+                                </div>
+                            {% endif %}
                             <p>{{ item.text }}</p>
-                            {% endfor %}
+
                             <div class="about__right__text__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-instagram"></i></a>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

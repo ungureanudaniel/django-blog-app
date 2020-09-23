@@ -796,6 +796,7 @@ ol {
 
 .hero__inside__item--wide .hero__inside__item--text {
 	overflow: hidden;
+
 }
 
 .hero__inside__item--wide .hero__inside__item--text .label {
@@ -806,10 +807,12 @@ ol {
 	list-style: none;
 	display: inline-block;
 	margin-right: 18px;
-	color: #f4952f;
+	text-decoration: none;
+    color: inherit;
 	font-size: 12px;
 	text-transform: uppercase;
 	position: relative;
+
 }
 
 .hero__inside__item--wide .hero__inside__item--text .label li:last-child {
@@ -821,7 +824,7 @@ ol {
 }
 
 .hero__inside__item--wide .hero__inside__item--text .label li:after {
-	position: absolute;
+	position: relative;
 	right: -14px;
 	top: -2px;
 	content: "|";
@@ -875,6 +878,7 @@ ol {
 	bottom: 20px;
 	width: 100%;
 	padding: 0 30px;
+
 }
 
 .hero__inside__item--meta {
@@ -907,6 +911,9 @@ ol {
 
 .hero__inside__item--text {
 	overflow: hidden;
+	background: rgba(0, 0, 0, 0.3);
+	padding: 11px;
+
 }
 
 .hero__inside__item--text .label {
