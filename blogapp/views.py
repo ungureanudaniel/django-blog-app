@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView
 from .models import About, Post, Category
 from .forms import PostForm, CommentForm, AboutForm, CategoryForm
-from .utils import insta_followers_count, fb_followers_count
+# from .utils import insta_followers_count, fb_followers_count
 # from authentication.models import Subscribe
 # from authentication.forms import SubscribeForm
 from django.db.models import Q, Count
