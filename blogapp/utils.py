@@ -10,6 +10,7 @@ def insta_followers_count():
     instagram_url = 'https://www.instagram.com'
     profile_url = 'artisanbakerybrasov'
     response = requests.get(f"{instagram_url}/{profile_url}")
+    insta_followers_count = ""
     #print(response.status_code)
     if response.ok:
         bs_html = BeautifulSoup(response.text, "html.parser")

@@ -54,14 +54,16 @@ def AddPostView(request):
 
 
 def PostListView(request):
+    template_name = 'blogapp/home.html'
     category_count = get_category_count()
     print(category_count)
-    template_name = 'blogapp/home.html'
+
     object_list = Post.objects.filter(status='Published').order_by('-created_date')
     categories = Category.objects.all()
     featured_posts = Post.objects.filter(featured=True, status='Published')
     four_latest = Post.objects.order_by('-created_date')[1:4]
     about_list = About.objects.all()[:1]
+    instagram_followers = ""
     instagram_followers = insta_followers_count()
     fb_followers = fb_followers_count()
     #pagination

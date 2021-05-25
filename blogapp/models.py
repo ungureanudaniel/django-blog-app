@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from ckeditor.fields import RichTextField
 
-# Create your models here.
+
 #-----------------------------------THE POST CATEGORIES MODEL-------------------------------------------
 class Category(models.Model):
     name = models.CharField(max_length=20)
@@ -84,5 +84,3 @@ class About(models.Model):
 
     def __str__(self):
         return self.title
-
-
