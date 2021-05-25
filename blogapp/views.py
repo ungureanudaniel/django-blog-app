@@ -178,7 +178,7 @@ def CategoryView(request, cats):
     template_name = 'blogapp/category.html'
     post_categories = Post.objects.filter(category=cats.replace('-', ' '))
     print(post_categories)
-    # cat_menu = Category.objects.all()
+    cat_menu = Category.objects.all()
     instagram_followers = insta_followers_count()
     fb_followers = fb_followers_count()
     context = {
@@ -344,4 +344,4 @@ def LoginView(request):
 #------------------------------------------LOGOUT VIEW-------------------------------------------
 def LogoutView(request):
     logout(request)
-    redirect("/")
+    return HttpResponseRedirect(reverse('home'))
