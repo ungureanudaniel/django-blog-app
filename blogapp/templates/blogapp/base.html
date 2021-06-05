@@ -8,8 +8,20 @@
     <meta content="Foodeiblog, unica, creative, html" name="keywords">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <title>Mall-ul de Ganduri</title>
+    <title>Mall-ul de Ganduri | A blog that will change your taste in every way</title>
+    <meta name="description" property="og:description" content="A food, lifestyle and children blog, with heart warming posts.">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="keywords" content="food blog, children blog, lifestyle blog, travel blog, , food advertising, professional photos, high resolution photos, fotografii profesionale, blog cu copii, blog despre viata">
+    <meta name="author" content="Mallul de ganduri">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://wwww.malluldeganduri.com/">
+    <meta property="og:site_name" content="Mallul de ganduri">
+    <meta property="og:title" content="Mallul de ganduri | A blog that will change your taste in every way" />
+    <meta property="og:description" content="A food, lifestyle and children blog, with heart warming posts.">
+    <meta property="og:image" content="https://photoportfoliowebsite.s3.eu-central-1.amazonaws.com/Veverita-5.jpg">
+    <meta property="og:image:alt" content=".">
 
+    <link rel="canonical" href="https://wwww.malluldeganduri.com/">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap"
         rel="stylesheet">
@@ -40,13 +52,23 @@
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="#">Recipes</a></li>
-                <li><a href="#">Dinner</a></li>
-                <li><a href="#">Desserts</a></li>
-                {% for item in abouts %}
-                <li><a href="{% url 'about' item.pk %}">About</a></li>
-                {% endfor %}
+                <li class="dropdown"><a href="#">Post categories</a>
+                    <ul class="dropdown__menu">
+                        {% for cat in categories %}
+                        <li><a style="color:white;" href="{% url 'category' cat.pk %}">{{ cat }}</a></li>
+
+                        {% endfor %}
+                    </ul>
+                </li>
+
+                <li><a href="{% url 'about' %}">About</a></li>
+
                 <li><a href="{% url 'contact' %}">Contact</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'add_post' %}">Add post</a></li>
+                <li><a href="{% url 'draft_posts' %}">Draft posts</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% endif %}
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -97,7 +119,7 @@
                                 <li class="dropdown"><a href="#">Post categories</a>
                                     <ul class="dropdown__menu">
                                         {% for cat in categories %}
-                                        <li><a style="color:white;" href="{% url 'category' cat|slugify %}">{{ cat }}</a></li>
+                                        <li><a style="color:white;" href="{% url 'category' cat.pk %}">{{ cat }}</a></li>
 
                                         {% endfor %}
                                     </ul>
@@ -164,7 +186,7 @@
                     <div class="footer__instagram__avatar--text">
                         <h5><a href="https://www.instagram.com/artisanbakerybrasov/"><small></small></a></h5>
 
-                        <span>449 followers</span>
+                        <span>{{ instagram_followers }} followers</span>
 
                     </div>
                 </div>
@@ -175,7 +197,7 @@
                     <div class="footer__facebook__avatar--text">
                         <h5><a href="https://www.facebook.com/artisanbakerybrasov/"><small></small></a></h5>
 
-                        <span>3049 followers</span>
+                        <span>{{ fb_followers }} followers</span>
 
                     </div>
                 </div>

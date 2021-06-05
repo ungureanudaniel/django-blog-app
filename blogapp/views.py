@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView
 from .models import About, Post, Category
 from .forms import PostForm, CommentForm, AboutForm, CategoryForm
-# from .utils import insta_followers_count, fb_followers_count
+from .utils import insta_followers_count, fb_followers_count
 # from authentication.models import Subscribe
 # from authentication.forms import SubscribeForm
 from django.db.models import Q, Count
@@ -174,9 +174,9 @@ class PostDeleteView(DeleteView):
     success_url = reverse_lazy('home')
 
 #-------------------------------CATEGORY VIEW-------------------------------------
-def CategoryView(request, cats):
+def CategoryView(request, pk):
     template_name = 'blogapp/category.html'
-    post_categories = Post.objects.filter(category=cats.replace('-', ' '))
+    post_categories = Post.objects.filter(pk=pk)
     print(post_categories)
     cat_menu = Category.objects.all()
     instagram_followers = insta_followers_count()
@@ -289,7 +289,7 @@ def ContactView(request):
                 message_name,
                 message,
                 message_email,
-                ['ioanad.ungureanu@gmail.com']
+                ['danielungureanu531@gmail.com']
                 )
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')

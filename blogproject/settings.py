@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'blogapp',
     'storages',
     'crispy_forms',
@@ -46,8 +48,10 @@ INSTALLED_APPS = [
     # 'registration',
 
 ]
+SITE_ID = 1
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -179,12 +183,13 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # EMAIL SETTINGS
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = '587'
-EMAIL_USER = 'ioanad.ungureanu@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-# EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
 
 # MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY')
 # MAILCHIMP_DATA_CENTER = os.environ.get('MAILCHIMP_DATA_CENTER')
