@@ -41,7 +41,7 @@ class CategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        fields = ['name', 'image']
+        fields = ['name', 'image', 'slug']
 
         widgets = {
             'name': forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Add a name...'}),
@@ -51,7 +51,7 @@ class AboutForm(forms.ModelForm):
 
     class Meta:
         model = About
-        fields = ['title', 'text', 'image']
+        fields = ['title', 'text', 'image1', 'image2', 'image3']
 
         widgets = {
             'title': forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Add a title...'}),

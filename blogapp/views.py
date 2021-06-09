@@ -1,9 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
+import datetime
+import random
+from django.views.decorators.csrf import csrf_exempt
+from django.template import loader
+from django.utils.html import strip_tags
+from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView
-from .models import About, Post, Category
+from .models import About, Post, Category, Subscriber
 from .forms import PostForm, CommentForm, AboutForm, CategoryForm
 from .utils import insta_followers_count, fb_followers_count
 # from authentication.models import Subscribe
@@ -14,14 +21,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
 
 
-
-# Create your views here.
-
-
 def get_category_count():
-    queryset = Post.objects.values_list('category').annotate(Count('category'))
-    count = queryset.values('category', 'category__count')
-    return count
+    cats = Category.objects.all().annotate(num_posts = Count('post'))
+    return cats
 
 #get category for dropdown list
 def get_context_data(self, *args, **kwargs):
@@ -55,8 +57,8 @@ def AddPostView(request):
 
 def PostListView(request):
     template_name = 'blogapp/home.html'
-    category_count = get_category_count()
-    print(category_count)
+    #-------------fetch nr of posts per category------------------------------
+    posts_count = get_category_count()
 
     object_list = Post.objects.filter(status='Published').order_by('-created_date')
     categories = Category.objects.all()
@@ -79,8 +81,9 @@ def PostListView(request):
 
 
     context = {
+        'posts_count': posts_count,
         'categories': categories,
-        'category_count': category_count,
+        # 'category_count': category_count,
         'queryset': page_queryset,
         'page_request_var': page_request_var,
         'featured_posts': featured_posts,
@@ -174,20 +177,21 @@ class PostDeleteView(DeleteView):
     success_url = reverse_lazy('home')
 
 #-------------------------------CATEGORY VIEW-------------------------------------
-def CategoryView(request, pk):
+def CategoryView(request, cat_slug):
     template_name = 'blogapp/category.html'
-    post_categories = Post.objects.filter(pk=pk)
-    print(post_categories)
+    category = get_object_or_404(Category, slug=cat_slug)
+    print(category)
+    postsbycategory = Post.objects.filter(category=category)
+    print(postsbycategory)
     cat_menu = Category.objects.all()
     instagram_followers = insta_followers_count()
     fb_followers = fb_followers_count()
     context = {
         'instagram_followers': instagram_followers,
         'fb_followers': fb_followers,
-        'cats': cats.title().replace('-', ' '),
         'cat_menu': cat_menu,
-     #   'category': category,
-        'post_categories': post_categories,
+        'category': category,
+        'postsbycategory': postsbycategory,
     }
     return render(request, template_name, context)
 
@@ -196,21 +200,23 @@ def AddCategoryView(request):
     template_name = 'blogapp/add_category.html'
     # form = CategoryForm(request.POST or None)
     categories = Post.objects.all()
-    if request.method == "POST":
+
+    form = CategoryForm(request.POST, request.FILES or None)
+
+    if request.method == 'POST':
+
         if form.is_valid():
-            # name = request.POST.get('name')
-            # img = request.POST.get('image')
-            messages.success(request, 'Category saved!', "alert alert-success alert-dismissible")
-            print('cat_saved')
             form.save()
             return redirect('/')
         else:
-            raise Http404
-            #form = CategoryForm()
-            messages.warning(request, 'Please fill all the fields!', "alert alert-warning alert-dismissible")
+            form = CategoryForm()
+
+
     context = {
+        'categories': categories,
         'form': form,
     }
+
     return render(request, template_name, context)
 
 
@@ -345,3 +351,58 @@ def LoginView(request):
 def LogoutView(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
+
+#-----------------------SEND EMAIL TO SUBSCRIBERS---------------------SEND EMAIL
+def random_digits():
+    return "%0.12d" % random.randint(0, 999999999999)
+
+def voucher_code():
+    nr_sub = Subscriber.objects.all().count()
+    return "Baker{}".format(int(nr_sub)+1)
+
+@csrf_exempt
+#--------------------------------------LOGIN VIEW-------------------------------
+def SubscribeView(request):
+    template = 'blogapp/subscription.html'
+    if request.method == "POST":
+        sub = Subscriber(email=request.POST.get('sub_email'), name = request.POST.get('sub_name'), voucher_prize = voucher_code(), conf_num=random_digits())
+        sub.save()
+        sub_subject = "Subscription to Artisan Bakery Brasov"
+        from_email=settings.FROM_EMAIL
+        sub_message = ''
+        html_content='Thank you {} for signing up to my email newsletter! \
+                Please complete the process by \
+                <a href="{}/subscription_confirmation/?email={}&conf_num={}"> clicking here to \
+                confirm your registration</a>.'.format(sub.name, request.build_absolute_uri(''), sub.email, sub.conf_num)
+        try:
+            send_mail(sub_subject, sub_message, from_email, [sub], html_message=html_content)
+            context = {
+
+            }
+        except BadHeaderError:
+            return HttpResponse('Invalid header found.')
+        return render(request, template, {})
+#
+    else:
+        context = {
+
+        }
+        return render(request, template, context)
+#
+# #---------------------------SUBS CONFIRMATION VIEW------------------------------
+def subscription_confirmation_view(request):
+    template = 'blogapp/subscription_confirmation.html'
+    try:
+        sub = Subscriber.objects.get(email=request.GET['email'])
+        if sub.conf_num == request.GET['conf_num']:
+            try:
+                sub.confirmed = True
+                sub.save()
+            except:
+                messages.warning(request, "Error! Your email cannot be registered. Please contact us at +40757484560")
+            return render(request, template, {'email': sub.email, 'action': 'confirmed'})
+        else:
+            return render(request, template, {'email': sub.email, 'action': 'denied'})
+    except:
+        messages.warning(request, "This email already exists in our database!")
+        return render(request, template, {})

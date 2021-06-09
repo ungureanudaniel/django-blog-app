@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'storages',
     'crispy_forms',
     'ckeditor',
-    # 'registration',
 
 ]
 SITE_ID = 1
@@ -135,16 +134,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-# STATIC_URL = '/blogapp/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-#
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
-
 #------------------AWS SETTINGS ---------------------------------------
 # AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 # AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -182,18 +171,32 @@ LOGOUT_URL = 'home'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# EMAIL SETTINGS
+# CONTACT EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_PORT = '587'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-
+# NEWSLETTER EMAIL SETTINGS
+FROM_EMAIL = 'danielungureanu531@gmail.com'
 # MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY')
 # MAILCHIMP_DATA_CENTER = os.environ.get('MAILCHIMP_DATA_CENTER')
 # MAILCHIMP_EMAIL_LIST_ID = os.environ.get('MAILCHIMP_EMAIL_LIST_ID')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # django_heroku.settings(locals(), staticfiles=False)
+
+#------------------------MESSAGES SETTINGS--------------------------------------
+try:
+    from django.contrib.messages import constants as messages
+    MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-info',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+    }
+except Exception as e:
+    pass

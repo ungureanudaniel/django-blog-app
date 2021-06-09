@@ -808,7 +808,7 @@ ol {
 	display: inline-block;
 	margin-right: 18px;
 	text-decoration: none;
-    color: inherit;
+	color: white;
 	font-size: 12px;
 	text-transform: uppercase;
 	position: relative;
@@ -828,7 +828,7 @@ ol {
 	right: -14px;
 	top: -2px;
 	content: "|";
-	color: #ffffff;
+	color: white;
 	opacity: 0.3;
 }
 
@@ -951,6 +951,7 @@ ol {
 	font-size: 20px;
 	color: #ffffff;
 	line-height: 26px;
+	text-decoration: none;
 }
 
 /*---------------------
@@ -1538,6 +1539,7 @@ ol {
 	line-height: 23px;
 	font-weight: 700;
 	letter-spacing: 0.5px;
+	text-decoration: none;
 }
 
 .sidebar__feature__item__list__single {

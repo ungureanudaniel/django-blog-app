@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 #----------------------VIEWS IMPORT------------------------------------------
 from .views import PostListView, PostDetailView, PostDeleteView, search, AboutView, ContactView, AddPostView, \
     DraftListView, PostEditView, PostDeleteView, AddAboutView, EditAboutView, LoginView, LogoutView, \
-    AddCategoryView, CategoryView
+    AddCategoryView, CategoryView, SubscribeView, subscription_confirmation_view
 #------------------SITE MAP IMPORTS----------------------------------------
 from django.contrib.sitemaps.views import sitemap
 from .sitemaps import PostSitemap, AboutSitemap, StaticSitemap
@@ -18,6 +18,8 @@ sitemaps = {
 
 urlpatterns = [
     path('', PostListView, name='home'),
+    path('subscription', SubscribeView, name='subscription'),
+    path('subscription/subscription_confirmation/', subscription_confirmation_view, name='subscription_confirmation'),
     path('draft_posts', DraftListView, name='draft_posts'),
     path('results/', search, name='search'),
     path('add_post/', AddPostView, name='add_post'),
@@ -26,7 +28,7 @@ urlpatterns = [
     path('post_detail/<int:pk>', PostDetailView, name='post_detail'),
     path('post_edit/<int:pk>', PostEditView, name='post_edit'),
     path('post_detail/delete/<int:pk>', PostDeleteView.as_view(), name='post_delete'),
-    path('category/<int:pk>/', CategoryView, name='category'),
+    path('category/<slug:cat_slug>/', CategoryView, name='category'),
     #ABOUT ME URLS
     path('add_about/', AddAboutView, name='add_about'),
     path('about', AboutView, name='about'),

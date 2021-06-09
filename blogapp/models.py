@@ -5,23 +5,39 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from ckeditor.fields import RichTextField
 
+#-----------------------------------Newsletter MODEL----------------------------
+class Subscriber(models.Model):
+    email = models.EmailField(max_length=200)
+    name = models.EmailField(max_length=200)
+    conf_num =  models.CharField(max_length=15)
+    voucher_prize = models.CharField(max_length=10)
+    confirmed = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
-#-----------------------------------THE POST CATEGORIES MODEL-------------------------------------------
+    def __str__(self):
+        return self.email + " (" + ("not " if not self.confirmed else "") + "confirmed)"
+
+#-----------------------------------THE POST CATEGORIES MODEL-------------------
 class Category(models.Model):
     name = models.CharField(max_length=20)
     image = models.FileField(upload_to='media', blank=True)
-    # slug = models.SlugField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
 
-    def __str__(self):
-        return self.name
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
 
-    # def save(self, *args, **kwargs):
-    #     self.slug = slugify(self.name)
-    #     return super(Category, self).save(*args, **kwargs)
+
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super(Category, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('home')
-#
+
+    def __str__(self):
+        return self.name
 
 #----------------------------------THE POST MODEL WITH ALL DETAILS--------------------------------------
 class Post(models.Model):
@@ -40,7 +56,7 @@ class Post(models.Model):
     featured = models.BooleanField()
     #seo_title = models.CharField(max_length=60, blank=True, null=True)
     #seo_text = models.CharField(max_length=165, blank=True, null=True)
-    # slug = models.SlugField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
     created_date = models.DateTimeField(auto_now_add=True)
     #updated_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, default='Draft', choices=STATUS_CHOICES)
@@ -64,9 +80,9 @@ class Post(models.Model):
     def get_delete_url(self):
         return reverse('post_delete', kwargs={'pk': self.pk})
         #return reverse('home')
-    # def save(self, *args, **kwargs):
-    #     self.slug = slugify(self.title)
-    #     return super(Post, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        return super(Post, self).save(*args, **kwargs)
 
     @property
     def get_comments(self):
@@ -90,7 +106,9 @@ class Comment(models.Model):
 class About(models.Model):
     title = models.CharField(max_length=250)
     text = models.CharField(max_length=600)
-    image = models.FileField(upload_to='blog_image', blank=True)
+    image1 = models.ImageField(upload_to='blog_image', blank=True)
+    image2 = models.ImageField(upload_to='blog_image', blank=True)
+    image3 = models.ImageField(upload_to='blog_image', blank=True)
 
     def __str__(self):
         return self.title

@@ -5,6 +5,75 @@
 
 {% block content %}
 
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="header__top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-1 col-6 order-md-1 order-1">
+                    <div class="header__humberger">
+                        <i class="fa fa-bars humberger__open"></i>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-10 order-md-2 order-3">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="{% url 'home' %}">Home</a></li>
+                            <li class="dropdown"><a href="#">Post categories</a>
+                                <ul class="dropdown__menu">
+                                    {% for cat in categories %}
+                                    <li ><a style="color:white;" href="{% url 'category' cat.slug %}">{{ cat }}</a></li>
+
+                                    {% endfor %}
+                                </ul>
+                            </li>
+
+                            <li><a href="{% url 'about' %}">About</a></li>
+
+                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                            {% if user.is_authenticated %}
+                            <li><a href="{% url 'add_post' %}">Add post</a></li>
+                            <li><a href="{% url 'add_category' %}">Add category</a></li>
+                            <li><a href="{% url 'draft_posts' %}">Draft posts</a></li>
+                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-2 col-md-1 col-6 order-md-3 order-2">
+                    <div class="header__search">
+                        <i class="fa fa-search search-switch"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                <div class="header__btn">
+                    <a class="primary-btn" href="{% url 'subscription' %}">Subscribe</a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="header__logo">
+                    <a href="{% url 'home' %}"><img alt="" src="{% static 'img/logo6.png' %}"></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <div class="header__social">
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-youtube-play"></i></a>
+                    <a href="#"><i class="fa fa-instagram"></i></a>
+                    <a href="#"><i class="fa fa-envelope-o"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Header Section End -->
+
 <!-- Hero Section Begin -->
 <section class="hero">
     <div class="hero__slider owl-carousel">
@@ -19,16 +88,16 @@
                             data-setbg="{{ post.image.url }}">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>{{ post.created_date.day }}</span>
+                                    <span class="text-warning">{{ post.created_date.day }}</span>
                                     <p>{{ post.created_date|date:'F' }}</p>
                                 </div>
                                 <div class="hero__inside__item--text text-white" >
                                     <ul class="label">
-                                        <li><a class="font-weight-bold" href="{% url 'category' post.category %}">{{ post.category }}</a></li>
+                                      <li><a class="font-weight-bold text-warning" href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a class="font-weight-bold" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                     <ul class="widget">
-                                        <li class="font-weight-bold text-white ">by <span>{{ post.author.first_name }} {{ post.author.last_name }}</span></li>
+                                        <li class="font-weight-bold text-white "><span class="text-warning">by {{ post.author.first_name }} {{ post.author.last_name }}</span></li>
                                         <li>{{ views_count }}</li>
                                         <li>{{ comment_count }}</li>
                                     </ul>
@@ -36,49 +105,49 @@
                             </div>
                         </div>
                     </div>
-                      {% endif %}
+                    {% endif %}
                   {% endfor %}
 
 
                     <div class="col-lg-3 col-md-6  p-0">
-                        {% for post in four_latest %}
-                          {% if forloop.first %}
+                  {% for post in four_latest %}
+                      {% if forloop.first %}
                         <div class="hero__inside__item hero__inside__item--small set-bg"
                             data-setbg="{{ post.image.url }}">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>{{ post.created_date.day }}</span>
+                                    <span class="text-warning">{{ post.created_date.day }}</span>
                                     <p>{{ post.created_date|date:'F' }}</p>
                                 </div>
-                                <div class="hero__inside__item--text">
+                                <div class="hero__inside__item--text text-white" style="text-decoration: none;">
                                     <ul class="label">
-                                        <li><a href="{% url 'category' post.category %}">{{ post.category }}</a></li>
+                                        <li><a class="text-warning" href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5 ><a class="font-weight-bold" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
                             </div>
                         </div>
-                          {% endif %}
-                        {% endfor %}
-                        {% for post in four_latest %}
-                          {% if not forloop.first and not forloop.last %}
+                      {% endif %}
+                  {% endfor %}
+                  {% for post in four_latest %}
+                      {% if not forloop.first and not forloop.last %}
                         <div class="hero__inside__item hero__inside__item--small set-bg"
                             data-setbg="{{ post.image.url }}">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>{{ post.created_date.day }}</span>
+                                    <span class="text-warning">{{ post.created_date.day }}</span>
                                     <p>{{ post.created_date|date:'F' }}</p>
                                 </div>
-                                <div class="hero__inside__item--text">
+                                <div class="hero__inside__item--text  text-white" style="text-decoration: none;">
                                     <ul class="label">
-                                        <li><a href="{% url 'category' post.category %}">{{ post.category }}</a></li>
+                                        <li><a  class="text-warning" href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
-                      {% endfor %}
+                      {% endif %}
+                  {% endfor %}
                     </div>
 
                     {% for post in four_latest %}
@@ -87,12 +156,12 @@
                         <div class="hero__inside__item set-bg" data-setbg="{{ post.image.url }}">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>{{ post.created_date.day }}</span>
+                                    <span class="text-warning">{{ post.created_date.day }}</span>
                                     <p>{{ post.created_date|date:'F' }}</p>
                                 </div>
-                                <div class="hero__inside__item--text">
+                                <div class="hero__inside__item--text text-white" style="text-decoration: none;">
                                     <ul class="label">
-                                        <li><a href="{% url 'category' post.category %}">{{ post.category }}</a></li>
+                                        <li><a  class="text-warning" href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
@@ -116,16 +185,16 @@
                             data-setbg="{{ post.image.url }}">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>{{ post.created_date.day }}</span>
+                                    <span class="text-warning">{{ post.created_date.day }}</span>
                                     <p>{{ post.created_date|date:'F' }}</p>
                                 </div>
-                                <div class="hero__inside__item--text">
+                                <div class="hero__inside__item--text text-white" style="text-decoration: none;">
                                     <ul class="label">
-                                        <li>{{ post.category }}</li>
+                                        <li><a  class="text-warning" href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a class="font-weight-bold" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                     <ul class="widget">
-                                        <li class="font-weight-bold text-white ">by <span>{{ post.author.first_name }} {{ post.author.last_name }}</span></li>
+                                        <li class="font-weight-bold text-white "><span  class="text-warning">by {{ post.author.first_name }} {{ post.author.last_name }}</span></li>
                                         <li>{{ views_count }}</li>
                                         <li>{{ comment_count }}</li>
                                     </ul>
@@ -143,12 +212,12 @@
                             data-setbg="{{ post.image.url }}">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>{{ post.created_date.day }}</span>
+                                    <span class="text-warning">{{ post.created_date.day }}</span>
                                     <p>{{ post.created_date|date:'F' }}</p>
                                 </div>
-                                <div class="hero__inside__item--text">
+                                <div class="hero__inside__item--text text-white" style="text-decoration: none;">
                                     <ul class="label">
-                                        <li>{{ post.category }}</li>
+                                        <li><a  class="text-warning" href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a class="font-weight-bold" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
@@ -162,12 +231,12 @@
                             data-setbg="{{ post.image.url }}">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>{{ post.created_date.day }}</span>
+                                    <span class="text-warning">{{ post.created_date.day }}</span>
                                     <p>{{ post.created_date|date:'F' }}</p>
                                 </div>
-                                <div class="hero__inside__item--text">
+                                <div class="hero__inside__item--text text-white" style="text-decoration: none;">
                                     <ul class="label">
-                                        <li>{{ post.category }}</li>
+                                        <li><a  class="text-warning" href="{% url 'category' post.category %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a class="font-weight-bold" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
@@ -183,13 +252,12 @@
                         <div class="hero__inside__item set-bg" data-setbg="img/hero/hero-4.jpg">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>{{ post.created_date.day }}</span>
+                                    <span class="text-warning">{{ post.created_date.day }}</span>
                                     <p>{{ post.created_date|date:'F' }}</p>
                                 </div>
-                                <div class="hero__inside__item--text">
+                                <div class="hero__inside__item--text text-white" style="text-decoration: none;">
                                     <ul class="label">
-                                        <li>{{ post.category }}</li>
-                                        <li>Desserts</li>
+                                        <li><a  class="text-warning" href="{% url 'category' post.slug %}">{{ post.category }}</a></li>
                                     </ul>
                                     <h5><a class="font-weight-bold" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
                                 </div>
@@ -222,13 +290,13 @@
     <div class="container">
 
         <div class="row" >
-          {% for cat in categories %}
+          {% for cat in posts_count %}
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <hr>
                 <div class="categories__item set-bg" data-setbg="{{ cat.image.url }}">
                     <div class="categories__hover__text">
                         <h5><a>{{ cat.name }}</a></h5>
-                        <p class="text-center">{{ cat.category__count }} articles</p>
+                        <p class="text-center text-warning">{{ cat.num_posts }} articles</p>
                     </div>
 
                 </div>
@@ -269,7 +337,7 @@
                         <div class="categories__post__item__pic set-bg"
                             data-setbg="{{ post.image.url }}">
                             <div class="post__meta">
-                                <h4>{{ post.created_date.day }}</h4>
+                                <h4 class="text-warning">{{ post.created_date.day }}</h4>
                                 <span>{{ post.created_date|date:'F' }}</span>
                             </div>
                         </div>
@@ -356,53 +424,12 @@
                             <div class="sidebar__feature__item__large set-bg"
                                 data-setbg="{{ post.image.url }}">
                                 <div class="sidebar__feature__item__large--text">
-                                    <span><a href="{% url 'category' post.category %}">{{ post.category }}</a></span>
+                                    <span><a class="text-warning" href="{% url 'category' post.category %}">{{ post.category }}</a></span>
                                     <h5><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h5>
                                 </div>
                             </div>
                             {% endfor %}
-<!--                            <div class="sidebar__feature__item__list">&ndash;&gt;
-&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
-&lt;!&ndash;                                        <h4>08</h4>&ndash;&gt;
-&lt;!&ndash;                                        <span>Aug</span>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
-&lt;!&ndash;                                        <span>Dinner</span>&ndash;&gt;
-&lt;!&ndash;                                        <h5><a href="#">Grilled Potato and Green Bean Salad</a></h5>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                </div>&ndash;&gt;
-&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
-&lt;!&ndash;                                        <h4>05</h4>&ndash;&gt;
-&lt;!&ndash;                                        <span>Aug</span>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
-&lt;!&ndash;                                        <span>Smoothie</span>&ndash;&gt;
-&lt;!&ndash;                                        <h5><a href="#">The $8 French Rosé I Buy in Bulk Every Summer</a></h5>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                </div>&ndash;&gt;
-&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
-&lt;!&ndash;                                        <h4>26</h4>&ndash;&gt;
-&lt;!&ndash;                                        <span>jul</span>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
-&lt;!&ndash;                                        <span>Desert</span>&ndash;&gt;
-&lt;!&ndash;                                        <h5><a href="#">Ina Garten's Skillet-Roasted Lemon Chicken</a></h5>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                </div>&ndash;&gt;
-&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
-&lt;!&ndash;                                        <h4>16</h4>&ndash;&gt;
-&lt;!&ndash;                                        <span>jul</span>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
-&lt;!&ndash;                                        <span>Vegan</span>&ndash;&gt;
-&lt;!&ndash;                                        <h5><a href="#">The Best Weeknight Baked Potatoes, 3 Creative Ways</a></h5>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                </div>&ndash;&gt;
-&lt;!&ndash;                            </div>-->
+
                         </div>
                         <div class="sidebar__item__banner">
                             <img src="{% static 'img/about/Artisan-Bakery-1.jpg' %}" alt="">
@@ -413,8 +440,8 @@
                             </div>
 
                             <ul>
-                                {% for cat in category_count %}
-                                <li><a href="{% url 'home' %}">{{ cat.category|capfirst }}<span>{{ cat.category__count }}</span></a></li>
+                                {% for category in posts_count %}
+                                <li><a href="{% url 'home' %}">{{ category.name|capfirst }}<span>{{ category.num_posts }}</span></a></li>
                                 {% endfor %}
                         </div>
                      <div class="sidebar__subscribe__item">
@@ -422,7 +449,7 @@
                                     <h6>Subscribe</h6>
                                 </div>
                                 <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
-                                <a class="site-btn" href="#">Subscribe</a>
+                                <a class="site-btn" href="{% url 'subscription' %}">Subscribe</a>
                             </div>
                 </div>
               </div>
