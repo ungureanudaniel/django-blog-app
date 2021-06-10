@@ -89,8 +89,8 @@
                             <div class="signin__form__text">
                                 <form action="." method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
+                                    {{ form|safe }}
                                     {{ form.media }}
-                                    {{ form|crispy }}
 
                                     <button type="submit" class="site-btn">Save post</button><br/><hr>
                                     <a type="button" href="{% url 'home' %}" class="btn btn-secondary">Back home</a>
