@@ -12,7 +12,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView
 from .models import About, Post, Category, Subscriber
 from .forms import PostForm, CommentForm, AboutForm, CategoryForm
-from .utils import insta_followers_count, fb_followers_count
+# from .utils import insta_followers_count, fb_followers_count
 # from authentication.models import Subscribe
 # from authentication.forms import SubscribeForm
 from django.db.models import Q, Count
@@ -66,8 +66,6 @@ def PostListView(request):
     four_latest = Post.objects.order_by('-created_date')[1:4]
     about_list = About.objects.all()[:1]
     instagram_followers = ""
-    instagram_followers = insta_followers_count()
-    fb_followers = fb_followers_count()
     #pagination
     paginator = Paginator(object_list, 3) # Show 2 contacts per page.
     page_request_var = 'page'
@@ -83,16 +81,12 @@ def PostListView(request):
     context = {
         'posts_count': posts_count,
         'categories': categories,
-        # 'category_count': category_count,
         'queryset': page_queryset,
         'page_request_var': page_request_var,
         'featured_posts': featured_posts,
-        'fb_followers': fb_followers,
         'about_list': about_list,
         'four_latest': four_latest,
         'object_list': object_list,
-        'instagram_followers': instagram_followers,
-        #'page_request_var': page_request_var,
     }
     return render(request, template_name, context)
 
@@ -184,11 +178,7 @@ def CategoryView(request, cat_slug):
     postsbycategory = Post.objects.filter(category=category)
     print(postsbycategory)
     cat_menu = Category.objects.all()
-    instagram_followers = insta_followers_count()
-    fb_followers = fb_followers_count()
     context = {
-        'instagram_followers': instagram_followers,
-        'fb_followers': fb_followers,
         'cat_menu': cat_menu,
         'category': category,
         'postsbycategory': postsbycategory,
@@ -243,13 +233,9 @@ def AddAboutView(request):
 def AboutView(request):
     template_name = 'blogapp/about.html'
     about_list = About.objects.all()
-    instagram_followers = insta_followers_count()
-    fb_followers = fb_followers_count()
     form = AboutForm(request.POST or None)
     context = {
         'form': form,
-        'fb_followers': fb_followers,
-        'instagram_followers': instagram_followers,
         'about_list': about_list,
     }
     return render(request, template_name, context)
