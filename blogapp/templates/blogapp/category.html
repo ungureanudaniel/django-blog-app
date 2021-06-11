@@ -22,7 +22,7 @@
                             <li ><a href="{% url 'home' %}">Home</a></li>
                             <li class="dropdown"><a href="#">Post categories</a>
                                 <ul class="dropdown__menu">
-                                    {% for cat in categories %}
+                                    {% for cat in cat_menu %}
                                     <li  class="active"><a style="color:white;" href="{% url 'category' cat.slug %}">{{ cat }}</a></li>
 
                                     {% endfor %}
@@ -75,11 +75,14 @@
 </header>
 <!-- Header Section End -->
 
-{% if post_categories %}
+{% if postsbycategory %}
 
-  {{ cats }}
-  <div class="col-lg-8 col-md-8">
-                  {% for post in categories %}
+  <div class="responsive">
+    <h1 class="text-center m-5 p-2">{{ category|upper }}</h1>
+  </div>
+    <div class="col-lg-6 col-md-6">
+                  {% for post in postsbycategory %}
+
                     <div class="categories__post__item categories__post__item--large">
                         <div class="categories__post__item__pic set-bg"
                             data-setbg="{{ post.image.url }}">

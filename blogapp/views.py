@@ -22,7 +22,7 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def get_category_count():
-    cats = Category.objects.all().annotate(num_posts = Count('post'))
+    cats = Category.objects.all().annotate(num_posts = Count('postcategory'))
     return cats
 
 #get category for dropdown list
@@ -234,8 +234,10 @@ def AboutView(request):
     template_name = 'blogapp/about.html'
     about_list = About.objects.all()
     form = AboutForm(request.POST or None)
+    categories = Category.objects.all()
     context = {
         'form': form,
+        'categories': categories,
         'about_list': about_list,
     }
     return render(request, template_name, context)
@@ -268,7 +270,7 @@ def EditAboutView(request, pk):
 #-------------------------------CONTACT ME VIEW-------------------------------------
 def ContactView(request):
     template_name = 'blogapp/contact.html'
-
+    categories = Category.objects.all()
     if request.method == "POST":
         message_name = request.POST.get('message-name')
         message_email = request.POST.get('message-email')
@@ -289,9 +291,9 @@ def ContactView(request):
         else:
             return HttpResponse('Make sure all fields are entered and valid.')
 
-        render(request, template_name, {'message_name': message_name})
+        render(request, template_name, {'message_name': message_name, 'categories': categories,})
     else:
-        return render(request, template_name, {})
+        return render(request, template_name, {'categories': categories,})
 
 #-------------------------------SEARCH VIEW-------------------------------------
 def search(request):

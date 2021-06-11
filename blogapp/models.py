@@ -50,7 +50,7 @@ class Post(models.Model):
     image = models.FileField(upload_to='blog_image', blank=True)
     text = RichTextField(blank=True, null=True)
     #text = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='postcategory')
     comment_count = models.IntegerField(default=0)
     views_count = models.IntegerField(default=0)
     featured = models.BooleanField()
