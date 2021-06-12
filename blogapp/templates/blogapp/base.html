@@ -47,7 +47,9 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="{% url 'home' %}"><img alt="" src="{% static 'img/logo7.png' %}"></a>
+          {% for logo in logos %}
+            <a href="{% url 'home' %}"><img alt="" src="{{ logo.image.url }}"></a>
+          {% endfor %}
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
@@ -164,7 +166,9 @@
                 <div class="col-lg-12">
                     <div class="footer__text">
                         <div class="footer__logo">
-                            <a href="{% url 'home' %}"><img alt="" src="{% static 'img/logo6.png' %}"></a>
+                          {% for logo in logos %}
+                            <a href="{% url 'home' %}"><img alt="" src="{{ logo.image.url }}"></a>
+                          {% endfor %}
                         </div>
                         <p> </p>
                         <div class="footer__social">

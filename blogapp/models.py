@@ -5,6 +5,23 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from ckeditor.fields import RichTextField
 
+
+#------------------------------LOGO MODEL---------------------------------------
+class Logo(models.Model):
+    LOGO_CHOICES = (
+        ('Inactive', 'Inactive'),
+        ('Active', 'Active'),
+    )
+    name = models.CharField(max_length=200)
+    image = models.FileField(upload_to='media', blank=True)
+    status = models.CharField(choices=LOGO_CHOICES, max_length=30)
+
+    def get_absolute_url(self):
+        return reverse('home')
+#
+    def __str__(self):
+        return self.name
+
 #-----------------------------------Newsletter MODEL----------------------------
 class Subscriber(models.Model):
     email = models.EmailField(max_length=200)

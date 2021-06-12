@@ -98,53 +98,11 @@
                             <div class="sidebar__feature__item__large set-bg"
                                 data-setbg="{{ post.image.url }}">
                                 <div class="sidebar__feature__item__large--text">
-                                    <span>{{ post.category }}</span>
+                                    <span><a href="{% url 'category' cat.slug %}">{{ post.category }}</a></span>
                                     <h5><a href="#">{{ post.title }}</a></h5>
                                 </div>
                             </div>
                             {% endfor %}
-<!--                            <!--<div class="sidebar__feature__item__list">&ndash;&gt;
-&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
-&lt;!&ndash;                                        <h4>08</h4>&ndash;&gt;
-&lt;!&ndash;                                        <span>Aug</span>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
-&lt;!&ndash;                                        <span>Dinner</span>&ndash;&gt;
-&lt;!&ndash;                                        <h5><a href="#">Grilled Potato and Green Bean Salad</a></h5>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                </div>&ndash;&gt;
-&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
-&lt;!&ndash;                                        <h4>05</h4>&ndash;&gt;
-&lt;!&ndash;                                        <span>Aug</span>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
-&lt;!&ndash;                                        <span>Smoothie</span>&ndash;&gt;
-&lt;!&ndash;                                        <h5><a href="#">The $8 French Rosé I Buy in Bulk Every Summer</a></h5>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                </div>&ndash;&gt;
-&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
-&lt;!&ndash;                                        <h4>26</h4>&ndash;&gt;
-&lt;!&ndash;                                        <span>jul</span>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
-&lt;!&ndash;                                        <span>Desert</span>&ndash;&gt;
-&lt;!&ndash;                                        <h5><a href="#">Ina Garten's Skillet-Roasted Lemon Chicken</a></h5>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                </div>&ndash;&gt;
-&lt;!&ndash;                                <div class="sidebar__feature__item__list__single">&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__meta">&ndash;&gt;
-&lt;!&ndash;                                        <h4>16</h4>&ndash;&gt;
-&lt;!&ndash;                                        <span>jul</span>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                    <div class="post__text">&ndash;&gt;
-&lt;!&ndash;                                        <span>Vegan</span>&ndash;&gt;
-&lt;!&ndash;                                        <h5><a href="#">The Best Weeknight Baked Potatoes, 3 Creative Ways</a></h5>&ndash;&gt;
-&lt;!&ndash;                                    </div>&ndash;&gt;
-&lt;!&ndash;                                </div>&ndash;&gt;
-&lt;!&ndash;                            </div>-->
                         </div>
                         <div class="sidebar__item__banner">
                             <img src="{% static 'img/flower.jpg' %}" alt="">

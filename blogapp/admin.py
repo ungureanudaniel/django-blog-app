@@ -1,10 +1,13 @@
 from django.contrib import admin
-from .models import Post, About, Comment, Category, Subscriber
+from .models import Post, About, Comment, Category, Subscriber, Logo
 
 class CategoryAdmin(admin.ModelAdmin):
      list_display = ('name', 'image', 'slug')
      prepopulated_fields = {'slug': ('name',), }
-#
+
+class LogoAdmin(admin.ModelAdmin):
+     list_display = ('name', 'image')
+
 class SubscriberAdmin(admin.ModelAdmin):
      list_display = ('name', 'email', 'conf_num', 'voucher_prize', 'confirmed', 'timestamp')
 
@@ -21,6 +24,7 @@ class AboutAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Logo, LogoAdmin)
 admin.site.register(Subscriber, SubscriberAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(About, AboutAdmin)

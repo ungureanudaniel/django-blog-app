@@ -10,8 +10,8 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView
-from .models import About, Post, Category, Subscriber
-from .forms import PostForm, CommentForm, AboutForm, CategoryForm
+from .models import About, Post, Category, Subscriber, Logo
+from .forms import PostForm, CommentForm, AboutForm, CategoryForm, LogoForm
 # from .utils import insta_followers_count, fb_followers_count
 # from authentication.models import Subscribe
 # from authentication.forms import SubscribeForm
@@ -59,7 +59,8 @@ def PostListView(request):
     template_name = 'blogapp/home.html'
     #-------------fetch nr of posts per category------------------------------
     posts_count = get_category_count()
-
+    #--------------logo------------------------------
+    logos = Logo.objects.filter(status='active')
     object_list = Post.objects.filter(status='Published').order_by('-created_date')
     categories = Category.objects.all()
     featured_posts = Post.objects.filter(featured=True, status='Published')
@@ -79,6 +80,7 @@ def PostListView(request):
 
 
     context = {
+        'logos': logos,
         'posts_count': posts_count,
         'categories': categories,
         'queryset': page_queryset,
@@ -94,10 +96,14 @@ def DraftListView(request):
     template = 'blogapp/draft_posts.html'
     drafts = Post.objects.filter(status='Draft').order_by('created_date')
     about_list = About.objects.all()[:1]
+    #--------------logo------------------------------
+    logos = Logo.objects.filter(status='active')
+
     categories = Category.objects.all()
     category_count = get_category_count()
     featured_posts = Post.objects.filter(featured=True)
     context = {
+        'logos': logos,
         'featured_posts': featured_posts,
         'category_count': category_count,
         'categories': categories,
@@ -175,17 +181,21 @@ def CategoryView(request, cat_slug):
     template_name = 'blogapp/category.html'
     category = get_object_or_404(Category, slug=cat_slug)
     print(category)
+    #--------------logo------------------------------
+    logos = Logo.objects.filter(status='active')
+
     postsbycategory = Post.objects.filter(category=category)
     print(postsbycategory)
     cat_menu = Category.objects.all()
     context = {
+        'logos': logos,
         'cat_menu': cat_menu,
         'category': category,
         'postsbycategory': postsbycategory,
     }
     return render(request, template_name, context)
 
-#-------------------------------ADD CATEGORY VIEW-------------------------------------
+#-------------------------------ADD CATEGORY VIEW-------------------------------
 def AddCategoryView(request):
     template_name = 'blogapp/add_category.html'
     # form = CategoryForm(request.POST or None)
@@ -203,6 +213,28 @@ def AddCategoryView(request):
 
 
     context = {
+        'categories': categories,
+        'form': form,
+    }
+
+    return render(request, template_name, context)
+
+#-------------------------------ADD LOGO VIEW-------------------------------
+def AddLogoView(request):
+    template_name = 'blogapp/add_logo.html'
+
+    categories = Post.objects.all()
+    form = LogoForm(request.POST, request.FILES or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        else:
+            form = LogoForm()
+
+
+    context = {\
         'categories': categories,
         'form': form,
     }
@@ -233,9 +265,13 @@ def AddAboutView(request):
 def AboutView(request):
     template_name = 'blogapp/about.html'
     about_list = About.objects.all()
+    #--------------logo------------------------------
+    logos = Logo.objects.filter(status='active')
+
     form = AboutForm(request.POST or None)
     categories = Category.objects.all()
     context = {
+        'logos': logos,
         'form': form,
         'categories': categories,
         'about_list': about_list,
@@ -267,10 +303,13 @@ def EditAboutView(request, pk):
     return render(request, template_name, context)
 
 
-#-------------------------------CONTACT ME VIEW-------------------------------------
+#-------------------------------CONTACT ME VIEW---------------------------------
 def ContactView(request):
     template_name = 'blogapp/contact.html'
     categories = Category.objects.all()
+    #--------------logo------------------------------
+    logos = Logo.objects.filter(status='active')
+
     if request.method == "POST":
         message_name = request.POST.get('message-name')
         message_email = request.POST.get('message-email')
@@ -291,14 +330,17 @@ def ContactView(request):
         else:
             return HttpResponse('Make sure all fields are entered and valid.')
 
-        render(request, template_name, {'message_name': message_name, 'categories': categories,})
+        render(request, template_name, {'message_name': message_name, 'categories': categories, 'logos': logos})
     else:
-        return render(request, template_name, {'categories': categories,})
+        return render(request, template_name, {'categories': categories, 'logos': logos})
 
 #-------------------------------SEARCH VIEW-------------------------------------
 def search(request):
     template_name = 'blogapp/search.html'
     about_list = About.objects.all
+    #--------------logo------------------------------
+    logos = Logo.objects.filter(status='active')
+
     category_count = get_category_count()
     featured_posts = Post.objects.filter(featured=True)
     # q is just a word used to store the search word in a dicitonary in the database
@@ -313,6 +355,7 @@ def search(request):
     #pages = pagination(request, results, num=1)
 
     context = {
+        'logos': logos,
         'featured_posts': featured_posts,
         'category_count': category_count,
         'about_list': about_list,
@@ -329,7 +372,7 @@ def LoginView(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("/")
+            return render(request, template, {'user':user})
         else:
             return redirect("login")
     else:

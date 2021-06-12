@@ -15,7 +15,7 @@
                         <div class="tab-pane" id="tabs-2" role="tabpanel">
                             <div class="signin__form__text">
                                 <div class="mb-4">LOGIN PAGE</div>
-                                <form action="/" method="POST">
+                                <form action="{% url 'login' %}" method="POST">
                                     {% csrf_token %}
                                     <input type="text" name="username" placeholder="User Name*">
                                     <input type="password" name="password" placeholder="Password">

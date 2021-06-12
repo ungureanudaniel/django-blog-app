@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 #----------------------VIEWS IMPORT------------------------------------------
 from .views import PostListView, PostDetailView, PostDeleteView, search, AboutView, ContactView, AddPostView, \
     DraftListView, PostEditView, PostDeleteView, AddAboutView, EditAboutView, LoginView, LogoutView, \
-    AddCategoryView, CategoryView, SubscribeView, subscription_confirmation_view
+    AddCategoryView, CategoryView, SubscribeView, subscription_confirmation_view, AddLogoView
 #------------------SITE MAP IMPORTS----------------------------------------
 from django.contrib.sitemaps.views import sitemap
 from .sitemaps import PostSitemap, AboutSitemap, StaticSitemap
@@ -23,8 +23,8 @@ urlpatterns = [
     path('draft_posts', DraftListView, name='draft_posts'),
     path('results/', search, name='search'),
     path('add_post/', AddPostView, name='add_post'),
-
     path('add_category/', AddCategoryView, name='add_category'),
+    path('add_logo/', AddLogoView, name='add_logo'),
     path('post_detail/<int:pk>', PostDetailView, name='post_detail'),
     path('post_edit/<int:pk>', PostEditView, name='post_edit'),
     path('post_detail/delete/<int:pk>', PostDeleteView.as_view(), name='post_delete'),
