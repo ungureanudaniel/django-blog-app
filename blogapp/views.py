@@ -420,7 +420,7 @@ def SubscribeView(request):
         }
         return render(request, template, context)
 #
-# #---------------------------SUBS CONFIRMATION VIEW------------------------------
+#---------------------------SUBS CONFIRMATION VIEW----------------------------
 def subscription_confirmation_view(request):
     template = 'blogapp/subscription_confirmation.html'
     try:
@@ -436,4 +436,20 @@ def subscription_confirmation_view(request):
             return render(request, template, {'email': sub.email, 'action': 'denied'})
     except:
         messages.warning(request, "This email already exists in our database!")
+        return render(request, template, {})
+
+#---------------------------SUBS DELETION VIEW------------------------------
+def DELETE_SUBSCRIBERSVIEW(request):
+    template = 'blogapp/unsubscription.html'
+    if request.method == 'POST':
+        unsub_email = request.POST.get('unsub_email')
+        sub = Subscriber.objects.get(email=unsub_email)
+        print(sub)
+        if sub:
+            sub.delete()
+            messages.success(request, "Your email has been succesfully unsubscribed!")
+            return render(request, template, {'email': sub.email, 'action': 'unsubscribed'})
+        else:
+            return render(request, template, {'email': sub.email, 'action': 'denied'})
+    else:
         return render(request, template, {})
