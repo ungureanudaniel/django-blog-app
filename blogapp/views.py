@@ -395,14 +395,20 @@ def voucher_code():
 #--------------------------------------LOGIN VIEW-------------------------------
 def SubscribeView(request):
     template = 'blogapp/subscription.html'
+    duplicate_message = ""
     if request.method == "POST":
         try:
             duplicate = Subscriber.objects.get(email=request.POST.get('sub_email'))
+            if duplicate:
+                messages.warning(request, "This email already exists in our database!")
+                return render(request, template, {})
         except:
-            duplicate_message = messages.warning(request, "This email already exists in our database!")
 
+            #-----------------------SAVE IN DATABASE --------------------------
             sub = Subscriber(email=request.POST.get('sub_email'), name = request.POST.get('sub_name'), voucher_prize = voucher_code(), conf_num=random_digits())
             sub.save()
+            messages.success(request, "Check your email inbox for a confirmation link!")
+            #---------------------send confirmation email settings-------------
             sub_subject = "Subscription to Artisan Bakery Brasov"
             from_email=settings.FROM_EMAIL
             sub_message = ''
@@ -412,12 +418,13 @@ def SubscribeView(request):
                     confirm your registration</a>.'.format(sub.name, request.build_absolute_uri(''), sub.email, sub.conf_num)
             try:
                 send_mail(sub_subject, sub_message, from_email, [sub], html_message=html_content)
-                context = {
 
-                }
+                context = {
+                    }
+
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
-            return render(request, template, {})
+            return render(request, template, context)
 #
     else:
         context = {
