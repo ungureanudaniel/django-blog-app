@@ -15,9 +15,12 @@
                         <div class="tab-pane" id="tabs-2" role="tabpanel">
                           <div class="signin__form__text">
                               <div class="mb-4">SUBSCRIPTION PAGE</div>
-                              {% if messages %}
-                                <p>{{ messages }}</p>
-                              {% endif %}
+                              {% if duplicate_message %}
+                                {% for message in duplicate_message %}
+                                  <li {% if message.tags %} class="{{ message.tags }} m-2 p-2"{% endif %}>{{ message }}</li>
+                                  <a href="{% url 'home' %}" type="submit" class="btn btn-warning p-2">Return home</a>
+                                {% endfor %}
+                              {% else %}
                               <form action="{% url 'subscription' %}" method="POST">
                                   {% csrf_token %}
 
@@ -27,6 +30,7 @@
                                   <button type="submit" class="site-btn">Save</button><br/><br/><br/>
                                   <a href="{% url 'home' %}" type="submit" class="btn btn-warning p-2">Return home</a>
                               </form>
+                              {% endif %}
                           </div>
                         </div>
                     </div>

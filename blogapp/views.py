@@ -396,23 +396,28 @@ def voucher_code():
 def SubscribeView(request):
     template = 'blogapp/subscription.html'
     if request.method == "POST":
-        sub = Subscriber(email=request.POST.get('sub_email'), name = request.POST.get('sub_name'), voucher_prize = voucher_code(), conf_num=random_digits())
-        sub.save()
-        sub_subject = "Subscription to Artisan Bakery Brasov"
-        from_email=settings.FROM_EMAIL
-        sub_message = ''
-        html_content='Thank you {} for signing up to my email newsletter! \
-                Please complete the process by \
-                <a href="{}/subscription_confirmation/?email={}&conf_num={}"> clicking here to \
-                confirm your registration</a>.'.format(sub.name, request.build_absolute_uri(''), sub.email, sub.conf_num)
         try:
-            send_mail(sub_subject, sub_message, from_email, [sub], html_message=html_content)
-            context = {
+            duplicate = Subscriber.objects.get(email=request.POST.get('sub_email'))
+        except:
+            duplicate_message = messages.warning(request, "This email already exists in our database!")
 
-            }
-        except BadHeaderError:
-            return HttpResponse('Invalid header found.')
-        return render(request, template, {})
+            sub = Subscriber(email=request.POST.get('sub_email'), name = request.POST.get('sub_name'), voucher_prize = voucher_code(), conf_num=random_digits())
+            sub.save()
+            sub_subject = "Subscription to Artisan Bakery Brasov"
+            from_email=settings.FROM_EMAIL
+            sub_message = ''
+            html_content='Thank you {} for signing up to my email newsletter! \
+                    Please complete the process by \
+                    <a href="{}/subscription_confirmation/?email={}&conf_num={}"> clicking here to \
+                    confirm your registration</a>.'.format(sub.name, request.build_absolute_uri(''), sub.email, sub.conf_num)
+            try:
+                send_mail(sub_subject, sub_message, from_email, [sub], html_message=html_content)
+                context = {
+
+                }
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return render(request, template, {})
 #
     else:
         context = {
