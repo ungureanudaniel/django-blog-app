@@ -17,7 +17,7 @@
                                 <div class="mb-4">SUBSCRIPTION CONFIRMATION PAGE</div>
                                 {% if messages %}
                                   {% for message in messages %}
-                                  <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                  <div class="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                     {{ message.message }}
                                   </div>
                                   <a href="{% url 'home' %}" type="submit" class="btn btn-warning p-2">Return home</a>
