@@ -61,11 +61,6 @@
                             <div class="breadcrumb__option">
                                 <a href="{% url 'home' %}">Home</a>
                                 <span>Contact</span>
-                                {% if message_name %}
-                                  <h2>Multumesc {{ message_name }} pentru mesaj!</h2>
-                                  <h4>Voi reveni cu un raspuns cat de repede pot...</h4>
-                                  <br/><br/><br/><br/>
-                                {% else %}
                             </div>
                         </div>
                     </div>
@@ -94,9 +89,18 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                         <div class="contact__form">
+
                             <div class="contact__form__title">
+                              {% if messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                  {{ message.message }}
+                                </div>
+                                {% endfor %}
+                              {% else %}
                                 <h2>Want to talk? Can't wait to hear from you!</h2>
                                 <p>Please use the form below to send me a message.</p>
+                              {% endif %}
                             </div>
                             <form action="{% url 'contact' %}" method="POST">
                               {% csrf_token %}
@@ -107,7 +111,7 @@
                             </form>
                         </div>
                     </div>
-                    {% endif %}
+
                 </div>
             </div>
         </div>

@@ -324,9 +324,10 @@ def ContactView(request):
                 message_email,
                 ['danielungureanu531@gmail.com']
                 )
+                messages.success(request, "Thank you for writting me {}! I will answer ASAP.".format(message_name))
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
-            return HttpResponseRedirect('/contact/thanks/')
+            return HttpResponseRedirect('/contact/')
         else:
             return HttpResponse('Make sure all fields are entered and valid.')
 

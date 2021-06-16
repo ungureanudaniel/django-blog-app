@@ -17,8 +17,10 @@
                               <div class="mb-4">SUBSCRIPTION PAGE</div>
                               {% if messages %}
                                 {% for message in messages %}
-                                  <li {% if message.tags %} class="{{ message.tags }} m-2 p-2"{% endif %}>{{ message }}</li>
-                                  <a href="{% url 'home' %}" type="submit" class="btn btn-warning p-2">Return home</a>
+                                <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                  {{ message.message }}
+                                </div>
+                                <a href="{% url 'home' %}" type="submit" class="btn btn-warning p-2">Return home</a>
                                 {% endfor %}
                               {% else %}
                               <form action="{% url 'subscription' %}" method="POST">
