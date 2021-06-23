@@ -107,6 +107,8 @@
                                 <input type="text" name="message-name" placeholder="Name" required="required" data-error="Name is required.">
                                 <input type="text" name="message-email" placeholder="Email" required="required" data-error="Valid email is required.">
                                 <textarea name="message" placeholder="Message" required="required" data-error="Add a few words please."></textarea>
+                                {{ form.captcha }}
+                                <!-- <button class='js-captcha-refresh'>Refresh</button> -->
                                 <button type="submit" class="site-btn">Submit</button>
                             </form>
                         </div>
@@ -116,5 +118,16 @@
             </div>
         </div>
     </section>
+    <!-- <script>
+      $('.js-captcha-refresh').click(function(){
+          $form = $(this).parents('form');
+
+          $.getJSON($(this).data('url'), {}, function(json) {
+              // This should update your captcha image src and captcha hidden input
+          });
+
+          return false;
+      });
+    </script> -->
     <!-- Contact Section End -->
 {% endblock %}

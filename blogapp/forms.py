@@ -1,5 +1,6 @@
 from django import forms
 from .models import Post, About, Comment, Category, Logo
+from captcha.fields import CaptchaField
 
 choices = Category.objects.all().values_list('name', 'name')
 
@@ -67,3 +68,8 @@ class AboutForm(forms.ModelForm):
             'title': forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Add a title...'}),
             'text': forms.Textarea(attrs = {'class': 'form-control', 'placeholder': 'Add about yourself...'}),
         }
+
+
+
+class CaptchaForm(forms.Form):
+    captcha = CaptchaField()

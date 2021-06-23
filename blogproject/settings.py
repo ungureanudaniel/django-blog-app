@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'storages',
     'crispy_forms',
     'ckeditor',
+    'captcha',
 
 ]
 SITE_ID = 1

@@ -6,6 +6,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blogapp.urls')),
     path('', include('registration.urls')),
-
-
+    path('captcha/', include('captcha.urls')),
 ]

@@ -11,7 +11,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView
 from .models import About, Post, Category, Subscriber, Logo
-from .forms import PostForm, CommentForm, AboutForm, CategoryForm, LogoForm
+from .forms import PostForm, CommentForm, AboutForm, CategoryForm, LogoForm, CaptchaForm
 # from .utils import insta_followers_count, fb_followers_count
 # from authentication.models import Subscribe
 # from authentication.forms import SubscribeForm
@@ -309,31 +309,35 @@ def ContactView(request):
     categories = Category.objects.all()
     #--------------logo------------------------------
     logos = Logo.objects.filter(status='active')
-
+    form = CaptchaForm(request.POST)
     if request.method == "POST":
         message_name = request.POST.get('message-name')
         message_email = request.POST.get('message-email')
         message = request.POST.get('message')
-
         #send email
         if message and message_name and message_email:
-            try:
-                send_mail(
-                message_name,
-                message,
-                message_email,
-                ['danielungureanu531@gmail.com']
-                )
-                messages.success(request, "Thank you for writting me {}! I will answer ASAP.".format(message_name))
-            except BadHeaderError:
-                return HttpResponse('Invalid header found.')
-            return HttpResponseRedirect('/contact/')
+            if form.is_valid():
+                try:
+                    send_mail(
+                    message_name,
+                    message,
+                    message_email,
+                    ['danielungureanu531@gmail.com']
+                    )
+                    messages.success(request, "Thank you for writting me {}! I will answer ASAP.".format(message_name))
+                except BadHeaderError:
+                    return HttpResponse('Invalid header found.')
+                return HttpResponseRedirect('/contact/')
+            else:
+
+                messages.warning(request, "Failed! Please fill in the captcha field again!")
+                return HttpResponseRedirect('/contact/')
         else:
             return HttpResponse('Make sure all fields are entered and valid.')
 
-        render(request, template_name, {'message_name': message_name, 'categories': categories, 'logos': logos})
+        render(request, template_name, {'message_name': message_name, 'categories': categories, 'logos': logos, 'form': form,})
     else:
-        return render(request, template_name, {'categories': categories, 'logos': logos})
+        return render(request, template_name, {'categories': categories, 'logos': logos, 'form': form})
 
 #-------------------------------SEARCH VIEW-------------------------------------
 def search(request):
